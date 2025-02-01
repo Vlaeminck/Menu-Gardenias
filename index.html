@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Gardenias</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="categories-carousel">
+            <div class="category-list">
+                <button class="category-btn active" data-category="todos">Todos</button>
+                <button class="category-btn" data-category="Desayunos & Meriendas">Desayunos & Meriendas</button>
+                <button class="category-btn" data-category="Adicionales">Adicionales</button>
+                <button class="category-btn" data-category="Delicias">Delicias</button>
+                <button class="category-btn" data-category="Postres & Tortas">Postres & Tortas</button>
+                <button class="category-btn" data-category="Platitos & Picadas">Platitos & Picadas</button>
+                <button class="category-btn" data-category="Tostones">Tostones</button>
+                <button class="category-btn" data-category="Ensaladas">Ensaladas</button>
+                <button class="category-btn" data-category="Carnes">Carnes</button>
+                <button class="category-btn" data-category="Bebidas">Bebidas</button>
+                <button class="category-btn" data-category="Tragos">Tragos</button>
+                <button class="category-btn" data-category="Vinos">Vinos</button>
+                <!--<button class="category-btn" data-category="mensajes">Mensajes</button>-->
+            </div>
+        </div>
+        
+        <div class="products-container" id="productsContainer">
+            <!-- Los productos se cargarán dinámicamente -->
+        </div>
+
+        <!-- Formulario de mensajes -->
+        <div class="messages-form" id="messagesForm" style="display: none;">
+            <form id="messageForm" class="message-form" name="messages" method="POST" data-netlify="true">
+                <input type="hidden" name="form-name" value="messages">
+                <input type="text" name="name" id="userName" placeholder="Tu nombre" required>
+                <textarea name="message" id="userMessage" placeholder="Tu mensaje" required></textarea>
+                <button type="submit">Enviar mensaje</button>
+            </form>
+            <div class="form-success" id="formSuccess" style="display: none;">
+                <h3>¡Gracias por tu mensaje!</h3>
+                <p>Ha sido enviado correctamente.</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

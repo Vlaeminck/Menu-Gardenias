@@ -1,0 +1,181 @@
+:root {
+    --primary-color: #7b8a83;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+    --accent-color: #ffffff;
+    --spacing-unit: 1rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #7b8a83;
+    font-family: "Futura book", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+/* Header y Navegación */
+.menu-nav {
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-color);
+    padding: var(--spacing-unit);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.menu-categories {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: var(--spacing-unit);
+    padding: var(--spacing-unit) 0;
+}
+
+.menu-categories::-webkit-scrollbar {
+    display: none;
+}
+
+.menu-categories a {
+    color: var(--accent-color);
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+/* Contenedor principal del menú */
+.menu-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-unit);
+}
+
+/* Leyenda de íconos */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 1rem auto;
+    max-width: 800px;
+    border-radius: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+}
+
+.dietary-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Secciones del menú */
+.menu-section {
+    margin-bottom: 2rem;
+}
+
+.menu-section h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-unit);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* Items del menú */
+.menu-item {
+    background-color: var(--accent-color);
+    padding: var(--spacing-unit);
+    margin-bottom: var(--spacing-unit);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.dietary-icons {
+    display: flex;
+    gap: 0.5rem;
+    color: var(--primary-color);
+}
+
+.price {
+    font-weight: bold;
+    color: var(--primary-color);
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .menu-container {
+        padding: 0.5rem;
+    }
+    
+    .menu-item {
+        padding: 0.75rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .menu-categories {
+        justify-content: center;
+    }
+    
+    .menu-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--spacing-unit);
+    }
+}
+
+/* Optimizamos los estilos existentes */
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.logo-img {
+    width: 60%;
+    max-width: 300px;
+    border: solid black;
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* Mantenemos los media queries existentes pero los optimizamos */
+@media (max-width: 940px) {
+    #divisor {
+        padding-bottom: 50px;
+    }
+    
+    .legend {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+}
