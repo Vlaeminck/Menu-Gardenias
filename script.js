@@ -1,294 +1,245 @@
-// Función para cargar los productos desde JSON
-async function cargarProductos() {
-    try {
-        const response = await fetch('data/productos.json');
-        const productos = await response.json();
-        return productos;
-    } catch (error) {
-        console.error('Error al cargar los productos:', error);
-        return {};
+const CONFIG = {
+    DATA_URL: 'data/productos.json',
+    SELECTORS: {
+        CATEGORY_LIST: 'categoryList',
+        PRODUCTS_CONTAINER: 'productsContainer',
+        SEARCH_INPUT: 'searchInput',
+        CATEGORY_BTNS: '.category-btn'
     }
-}
+};
 
-// Modificar la función que muestra los productos para usar los íconos
-function crearTarjetaProducto(producto) {
-    const iconoVeggie = `
-        <svg class="tag-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
-        </svg>`;
-        
-    const iconoGlutenFree = `
-        <svg class="tag-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
-        </svg>`;
+class MenuApp {
+    constructor() {
+        this.products = {};
+        this.categoriesInfo = {
+            'todos': { titulo: 'Menu Completo', descripcion: '' },
+            'Desayunos & Meriendas': {
+                titulo: 'Desayunos & Meriendas',
+                descripcion: 'Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. Incluyen infusión + vasito de soda.'
+            },
+            'Adicionales': { titulo: 'Adicionales', descripcion: 'Complementos perfectos.' },
+            'Delicias': { titulo: 'Delicias', descripcion: 'Panadería y pastelería artesanal.' },
+            'Postres & Tortas': { titulo: 'Postres & Tortas', descripcion: 'Dulces tentaciones.' },
+            'Platitos & Picadas': { titulo: 'Platitos & Picadas', descripcion: 'Para compartir.' },
+            'Tostones': { titulo: 'Tostones', descripcion: 'Nuestras famosas tostadas.' },
+            'Ensaladas': { titulo: 'Ensaladas', descripcion: 'Frescas y saludables.' },
+            'Carnes': { titulo: 'Almuerzos', descripcion: 'Cocina abierta de 12 a 16hs.' },
+            'Bebidas': { titulo: 'Bebidas', descripcion: 'Refrescantes.' },
+            'Tragos': { titulo: 'Tragos', descripcion: 'Coctelería clásica y de autor.' },
+            'Vinos': { titulo: 'Vinos', descripcion: 'Selección exclusiva.' }
+        };
 
-    return `
-        <div class="product-card">
-            <div class="product-header">
-                <h3 class="product-name">${producto.nombre}</h3>
-                <span class="product-price">$${producto.precio.toLocaleString('es-AR')}</span>
-            </div>
-            ${producto.descripcion ? `<p class="product-description">${producto.descripcion}</p>` : ''}
-            <div class="product-tags">
-                ${producto.esVegano ? `
-                    <span class="tag">
-                        ${iconoVeggie}
-                        Veggie
-                    </span>` : ''}
-                ${producto.sinTacc ? `
-                    <span class="tag">
-                        ${iconoGlutenFree}
-                        Gluten free
-                    </span>` : ''}
-            </div>
-        </div>
-    `;
-}
+        this.init();
+    }
 
-// Inicializar la aplicación
-document.addEventListener('DOMContentLoaded', async () => {
-    const productos = await cargarProductos();
-    const botones = document.querySelectorAll('.category-btn');
-    const contenedor = document.getElementById('productsContainer');
+    async init() {
+        await this.loadData();
+        this.renderCategories();
+        this.renderProducts('todos');
+        this.setupEventListeners();
+        this.setupIntersectionObserver();
+    }
 
-    const categoriasInfo = {
-        'todos': {
-            titulo: 'Nuestro Menú Completo',
-            descripcion: 'Descubre toda nuestra variedad de platos y bebidas cuidadosamente preparados'
-        },
-        'Desayunos & Meriendas': {
-            titulo: 'Desayunos & Meriendas',
-            descripcion: `
-                <div class="category-important-info">
-                    <p class="schedule-info">DISFRUTA NUESTROS DESAYUNOS DE 9 A 12HS & MERIENDAS DE 16 A 20HS</p>
-                    <p class="subtitle">EN HONOR A ELLAS</p>
-                    <p class="included-info">INCLUYE UNA INFUSION + VASITO DE SODA</p>
-                    <p class="drinks-options">espresso | espresso jarrito | latte | té | lágrima | jugo de naranja mediano</p>
-                    <div class="dietary-info">
-                        <p><span class="tag-highlight">🤍 GLUTEN FREE</span> | Nuestra cocina no está certificada sin tacc |\  aclararlo a nuestro personal</p>
-                        <p><span class="tag-highlight">🌿 PEDILO VEGGIE</span> | Aclararlo a nuestro personal</p>
-                    </div>
-                </div>`
-        },
-        'Adicionales': {
-            titulo: 'Adicionales',
-            descripcion: 'Complementá tu plato principal con nuestros sabrosos adicionales'
-        },
-        'Delicias': {
-            titulo: 'Delicias',
-            descripcion: 'Tentate con nuestras exquisitas opciones de panadería y pastelería'
-        },
-        'Postres & Tortas': {
-            titulo: 'Postres & Tortas',
-            descripcion: 'Dulces tentaciones elaboradas con los mejores ingredientes'
-        },
-        'Platitos & Picadas': {
-            titulo: 'Platitos & Picadas',
-            descripcion: 'Perfectos para compartir o disfrutar como entrada'
-        },
-        'Tostones': {
-            titulo: 'Tostones',
-            descripcion: 'Nuestras famosas tostadas con combinaciones únicas'
-        },
-        'Ensaladas': {
-            titulo: 'Ensaladas',
-            descripcion: 'Opciones frescas y saludables para cualquier momento del día'
-        },
-        'Carnes': {
-            titulo: 'Almuerzos',
-            descripcion: `
-                <div class="category-important-info">
-                    <p class="schedule-info">NUESTRA COCINA ESTA ABIERTA DE 12 A 16HS</p>
-                    <div class="dietary-info">
-                        <p><span class="tag-highlight">PEDILO VEGGIE</span> | Aclararlo a nuestro personal y cambia la proteína por tofu</p>
-                    </div>
-                </div>`
-        },
-        'Bebidas': {
-            titulo: 'Bebidas',
-            descripcion: 'Refrescantes opciones para acompañar tu comida'
-        },
-        'Tragos': {
-            titulo: 'Tragos',
-            descripcion: 'Cócteles clásicos y de autor para momentos especiales'
-        },
-        'Vinos': {
-            titulo: 'Vinos',
-            descripcion: 'Nuestra cuidada selección de vinos nacionales e importados'
-        }
-    };
-
-    function mostrarProductos(categoria) {
-        const contenedor = document.getElementById('productsContainer');
-        
-        if (categoria === 'todos') {
-            // Mostrar todas las categorías con sus respectivos productos
-            contenedor.innerHTML = Object.keys(productos)
-                .map(cat => {
-                    if (productos[cat].length === 0) return ''; // No mostrar categorías vacías
-                    
-                    const categoriaInfo = categoriasInfo[cat];
-                    return `
-                        <div class="category-section">
-                            <div class="category-header">
-                                <h2 class="category-title">${categoriaInfo.titulo}</h2>
-                                <p class="category-description">${categoriaInfo.descripcion}</p>
-                            </div>
-                            <div class="products-grid">
-                                ${productos[cat].map(producto => crearTarjetaProducto(producto)).join('')}
-                            </div>
-                        </div>
-                    `;
-                })
-                .join('<div class="category-divider"></div>');
-        } else {
-            // Mostrar una sola categoría
-            const productosAMostrar = productos[categoria] || [];
-            const categoriaInfo = categoriasInfo[categoria];
-            
-            contenedor.innerHTML = `
-                <div class="category-header">
-                    <h2 class="category-title">${categoriaInfo.titulo}</h2>
-                    <p class="category-description">${categoriaInfo.descripcion}</p>
-                </div>
-                <div class="products-grid">
-                    ${productosAMostrar.map(producto => crearTarjetaProducto(producto)).join('')}
-                </div>
-            `;
+    async loadData() {
+        try {
+            const response = await fetch(CONFIG.DATA_URL);
+            this.products = await response.json();
+        } catch (error) {
+            console.error('Error loading data:', error);
         }
     }
 
-    async function handleMessages(show = false) {
-        const messagesForm = document.getElementById('messagesForm');
-        const productsContainer = document.getElementById('productsContainer');
-        
-        if (show) {
-            messagesForm.style.display = 'block';
-            productsContainer.style.display = 'none';
-        } else {
-            messagesForm.style.display = 'none';
-            productsContainer.style.display = 'grid';
-        }
-    }
+    renderCategories() {
+        const container = document.getElementById(CONFIG.SELECTORS.CATEGORY_LIST);
+        const categories = ['todos', ...Object.keys(this.products)];
 
-    function getMessages() {
-        // Obtener mensajes del localStorage
-        const messages = localStorage.getItem('messages');
-        return messages ? JSON.parse(messages) : [];
-    }
-
-    function saveMessage(message) {
-        const messages = getMessages();
-        messages.unshift(message); // Agregar nuevo mensaje al inicio
-        localStorage.setItem('messages', JSON.stringify(messages));
-    }
-
-    function displayMessages(messages) {
-        const messagesList = document.getElementById('messagesList');
-        messagesList.innerHTML = messages.map(message => `
-            <div class="message-card">
-                <div class="message-header">
-                    <span>${message.name}</span>
-                    <span class="message-date">${new Date(message.date).toLocaleDateString()}</span>
-                </div>
-                <div class="message-content">${message.message}</div>
-            </div>
+        container.innerHTML = categories.map(cat => `
+            <li>
+                <button class="category-btn ${cat === 'todos' ? 'active' : ''}" 
+                        data-category="${cat}">
+                    ${cat.replace(/_/g, ' ')}
+                </button>
+            </li>
         `).join('');
     }
 
-    document.getElementById('messageForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const form = e.target;
-        const formSuccess = document.getElementById('formSuccess');
-        const formData = new FormData(form);
+    createProductCard(product) {
+        const veggieIcon = product.esVegano ? `
+            <span class="tag veggie">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right:4px;">
+                    <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+                </svg>
+                VEGGIE
+            </span>` : '';
 
-        const messageData = {
-            name: formData.get('name'),
-            message: formData.get('message'),
-            date: new Date().toISOString()
-        };
+        const taccIcon = product.sinTacc ? `
+            <span class="tag gluten-free">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right:4px;">
+                     <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+                </svg>
+                S/TACC
+            </span>` : '';
 
-        try {
-            // Enviar a Netlify Forms
-            await fetch('/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formData).toString()
+        return `
+            <div class="product-card">
+                <div class="product-header">
+                    <h3 class="product-name">${product.nombre}</h3>
+                    <div class="dots"></div>
+                    <span class="product-price">$${product.precio.toLocaleString('es-AR')}</span>
+                </div>
+                ${product.descripcion ? `<p class="product-description">${product.descripcion}</p>` : ''}
+                <div class="product-tags">
+                    ${veggieIcon}
+                    ${taccIcon}
+                </div>
+            </div>
+        `;
+    }
+
+    renderProducts(filterCategory = 'todos', searchTerm = '') {
+        const container = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
+        let content = '';
+
+        const categoriesToRender = filterCategory === 'todos'
+            ? Object.keys(this.products)
+            : [filterCategory];
+
+        categoriesToRender.forEach(cat => {
+            const catProducts = this.products[cat];
+            if (!catProducts || catProducts.length === 0) return;
+
+            // Filter by search term
+            const filteredProducts = catProducts.filter(p => {
+                if (!searchTerm) return true;
+                const term = searchTerm.toLowerCase();
+                return p.nombre.toLowerCase().includes(term) ||
+                    (p.descripcion && p.descripcion.toLowerCase().includes(term));
             });
 
-            // Enviar a nuestro repositorio de respaldo
-            await fetch('https://api.github.com/repos/[TU_USUARIO]/[TU_REPO]/contents/data/messages.json', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'token [TU_TOKEN_DE_GITHUB]',
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            }).then(async (response) => {
-                const data = await response.json();
-                let messages = [];
-                
-                if (data.content) {
-                    // Decodificar contenido existente
-                    const content = atob(data.content);
-                    messages = JSON.parse(content);
-                }
+            if (filteredProducts.length > 0) {
+                const info = this.categoriesInfo[cat] || { titulo: cat, descripcion: '' };
 
-                // Agregar nuevo mensaje
-                messages.push(messageData);
-
-                // Actualizar archivo en GitHub
-                await fetch('https://api.github.com/repos/[TU_USUARIO]/[TU_REPO]/contents/data/messages.json', {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': 'token [TU_TOKEN_DE_GITHUB]',
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: 'Nuevo mensaje agregado',
-                        content: btoa(JSON.stringify(messages, null, 2)),
-                        sha: data.sha
-                    })
-                });
-            });
-
-            // Mostrar mensaje de éxito
-            form.style.display = 'none';
-            formSuccess.style.display = 'block';
-            
-            // Resetear formulario
-            form.reset();
-            
-            // Después de 3 segundos, volver a la vista de productos
-            setTimeout(() => {
-                handleMessages(false);
-                document.querySelector('[data-category="todos"]').click();
-                form.style.display = 'block';
-                formSuccess.style.display = 'none';
-            }, 3000);
-
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
-        }
-    });
-
-    botones.forEach(boton => {
-        boton.addEventListener('click', (e) => {
-            botones.forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            
-            const categoria = e.target.dataset.category;
-            if (categoria === 'mensajes') {
-                handleMessages(true);
-            } else {
-                handleMessages(false);
-                mostrarProductos(categoria);
+                content += `
+                    <section id="${cat}" class="category-section">
+                        <div class="category-header">
+                            <h2 class="category-title">${info.titulo}</h2>
+                            ${info.descripcion ? `<p class="category-description">${info.descripcion}</p>` : ''}
+                        </div>
+                        <div class="products-grid">
+                            ${filteredProducts.map(p => this.createProductCard(p)).join('')}
+                        </div>
+                    </section>
+                `;
             }
         });
-    });
 
-    // Mostrar todos los productos al inicio
-    mostrarProductos('todos');
+        if (content === '') {
+            content = '<div class="no-results"><p>No se encontraron productos.</p></div>';
+        }
+
+        container.innerHTML = content;
+    }
+
+    setupEventListeners() {
+        // Category Navigation
+        document.getElementById(CONFIG.SELECTORS.CATEGORY_LIST).addEventListener('click', (e) => {
+            if (e.target.classList.contains('category-btn')) {
+                // Update active state
+                document.querySelectorAll(CONFIG.SELECTORS.CATEGORY_BTNS).forEach(btn =>
+                    btn.classList.remove('active'));
+                e.target.classList.add('active');
+
+                const category = e.target.dataset.category;
+
+                if (category === 'todos') {
+                    this.renderProducts('todos');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // If we are in 'todos' view (or filtered view), we might want to just scroll to section
+                    // But for simplicity in this version, we will re-render "todos" to ensure all sections exist
+                    // and then scroll, OR implement single-category view.
+                    // Let's implement Scroll to Section if "todos" is active, otherwise specific view.
+
+                    // Current design choice: One long scroll for "todos", specific list for others?
+                    // To keep it simple and premium (like a real menu), let's stick to "All items" view mainly,
+                    // and buttons just scroll.
+
+                    const section = document.getElementById(category);
+                    if (section) {
+                        // Section exists, scroll to it
+                        const headerOffset = 180; // Adjust for sticky header
+                        const elementPosition = section.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    } else {
+                        // Section doesn't exist (maybe we were in search mode or single cat mode)
+                        // Reset to todos and then scroll
+                        this.renderProducts('todos');
+                        // Allow DOM to update then scroll
+                        setTimeout(() => {
+                            const newSection = document.getElementById(category);
+                            if (newSection) {
+                                const headerOffset = 180;
+                                const elementPosition = newSection.getBoundingClientRect().top;
+                                const offsetPosition = elementPosition + window.scrollY - headerOffset;
+                                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                            }
+                        }, 100);
+                    }
+                }
+            }
+        });
+
+        // Search
+        const searchInput = document.getElementById(CONFIG.SELECTORS.SEARCH_INPUT);
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value;
+            this.renderProducts('todos', term);
+        });
+    }
+
+    setupIntersectionObserver() {
+        // Optional: Highlight category button on scroll
+        // This is a bit complex with dynamic height content, but good for premium feel
+        const observerOptions = {
+            root: null,
+            rootMargin: '-150px 0px -70% 0px', // Trigger when section is near top
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    const btn = document.querySelector(`.category-btn[data-category="${id}"]`);
+                    if (btn) {
+                        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        // Scroll nav to button
+                        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections (needs to be attached after render)
+        // We'll attach this in a MutationObserver or just periodically check/reattach?
+        // Simpler: re-attach after renderProducts
+        const container = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
+        const mutationObserver = new MutationObserver(() => {
+            document.querySelectorAll('.category-section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        mutationObserver.observe(container, { childList: true, subtree: true });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new MenuApp();
 }); 

@@ -22,7 +22,7 @@
       "descripcion": "Dos medialunas o una vinoisserie del día",
       "precio": 6200,
       "esVegano": true,
-      "sinTacc": true
+      "sinTacc": false
     },
     {
       "id": 4,
@@ -567,7 +567,7 @@
       "nombre": "CIRUELO",
       "descripcion": "Pollo crema de palta zucchinis grillados y portobello",
       "precio": 15000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -593,7 +593,7 @@
       "nombre": "CALANDRIA",
       "descripcion": "Pollo verdes queso croutones y aderezo césar",
       "precio": 15200,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -659,7 +659,7 @@
       "nombre": "POLLO GRILLADO",
       "descripcion": "Con crema de verdeo y guarnición",
       "precio": 16500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
