@@ -21,7 +21,7 @@ def convertir_csv_a_json():
         # Leer el CSV usando punto y coma como separador
         with open(ruta_csv, 'r', encoding='utf-8-sig') as file:
             # Usar ; como separador
-            reader = csv.DictReader(file, delimiter=';')
+            reader = csv.DictReader(file, delimiter=',')
             
             # Verificar las columnas
             print("\nColumnas encontradas:", reader.fieldnames)

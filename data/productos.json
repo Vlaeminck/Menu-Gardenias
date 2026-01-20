@@ -4,7 +4,7 @@
       "id": 1,
       "nombre": "AMELIA QUERIDA",
       "descripcion": "Tostadas con dips para untar",
-      "precio": 9400,
+      "precio": 9500,
       "esVegano": true,
       "sinTacc": false
     },
@@ -22,7 +22,7 @@
       "descripcion": "Dos medialunas o una vinoisserie del día",
       "precio": 6200,
       "esVegano": true,
-      "sinTacc": false
+      "sinTacc": true
     },
     {
       "id": 4,
@@ -95,7 +95,7 @@
       "nombre": "TRUCHA AHUMADA",
       "descripcion": "",
       "precio": 6000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -103,7 +103,7 @@
       "nombre": "JAMÓN CRUDO",
       "descripcion": "",
       "precio": 3500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -111,7 +111,7 @@
       "nombre": "JAMÓN COCIDO Y QUESO",
       "descripcion": "",
       "precio": 3100,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -567,7 +567,7 @@
       "nombre": "CIRUELO",
       "descripcion": "Pollo crema de palta zucchinis grillados y portobello",
       "precio": 15000,
-      "esVegano": false,
+      "esVegano": true,
       "sinTacc": false
     },
     {
@@ -593,7 +593,7 @@
       "nombre": "CALANDRIA",
       "descripcion": "Pollo verdes queso croutones y aderezo césar",
       "precio": 15200,
-      "esVegano": false,
+      "esVegano": true,
       "sinTacc": false
     },
     {
@@ -659,7 +659,7 @@
       "nombre": "POLLO GRILLADO",
       "descripcion": "Con crema de verdeo y guarnición",
       "precio": 16500,
-      "esVegano": false,
+      "esVegano": true,
       "sinTacc": false
     },
     {
@@ -693,7 +693,7 @@
       "nombre": "GASEOSAS",
       "descripcion": "Línea coca cola",
       "precio": 3200,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -701,7 +701,7 @@
       "nombre": "AGUA AQA",
       "descripcion": "Con gas - sin gas",
       "precio": 2500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -709,7 +709,7 @@
       "nombre": "AQUARIUS",
       "descripcion": "Pera - manzana – pomelo",
       "precio": 2800,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -717,7 +717,7 @@
       "nombre": "LIMONADA",
       "descripcion": "Con menta y jengibre",
       "precio": 4500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -725,7 +725,7 @@
       "nombre": "POMELADA",
       "descripcion": "",
       "precio": 4500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -733,7 +733,7 @@
       "nombre": "LICUADO",
       "descripcion": "Multifruta o hasta dos frutas con agua leche o jugo",
       "precio": 5000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -741,7 +741,7 @@
       "nombre": "FROZZEN",
       "descripcion": "De naranja & maracuya",
       "precio": 5000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -749,7 +749,7 @@
       "nombre": "EXPRIMIDO DE NARANJA",
       "descripcion": "",
       "precio": 4500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -757,7 +757,7 @@
       "nombre": "MOCKTAIL UNO",
       "descripcion": "Durazno frutilla naranja menta y jengibre",
       "precio": 5500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -765,7 +765,7 @@
       "nombre": "MOCKTAIL DOS",
       "descripcion": "Lima hibiscus frutos rojos pomelo & soda",
       "precio": 5500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -773,7 +773,7 @@
       "nombre": "CAFE ESPRESSO",
       "descripcion": "Chico cortado o con crema",
       "precio": 3100,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -781,7 +781,7 @@
       "nombre": "CAFE LATTE",
       "descripcion": "",
       "precio": 4600,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -789,7 +789,7 @@
       "nombre": "SUBMARINO",
       "descripcion": "Chocolate y canela",
       "precio": 5000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -797,7 +797,7 @@
       "nombre": "ICED COFFEE",
       "descripcion": "",
       "precio": 5000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -805,7 +805,7 @@
       "nombre": "ICED TEA",
       "descripcion": "Té negro o té rojo CuraTé Alma jugo de lima jengibre miel",
       "precio": 5000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -813,7 +813,7 @@
       "nombre": "TE NEGRO EN HEBRAS",
       "descripcion": "",
       "precio": 3900,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     }
   ],
@@ -823,7 +823,7 @@
       "nombre": "MEDIA PINTA STELLA",
       "descripcion": "",
       "precio": 4000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -831,7 +831,7 @@
       "nombre": "PORRON CORONA",
       "descripcion": "",
       "precio": 5200,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -839,7 +839,7 @@
       "nombre": "APEROL SPRITZ",
       "descripcion": "Aperol espumante golpe de soda",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -847,7 +847,7 @@
       "nombre": "CYNAR JULEP",
       "descripcion": "Cynar menta y jugo de pomelo",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -855,7 +855,7 @@
       "nombre": "MOJITO",
       "descripcion": "Ron menta lima azúcar soda",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -863,7 +863,7 @@
       "nombre": "CAMPARI ORANGE",
       "descripcion": "Campari jugo de naranja",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -871,7 +871,7 @@
       "nombre": "FERNET BRANCA",
       "descripcion": "Con coca cola",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -879,7 +879,7 @@
       "nombre": "GIN TONIC",
       "descripcion": "",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -887,7 +887,7 @@
       "nombre": "GIN TONIC BOMBAY SAPHIRE",
       "descripcion": "",
       "precio": 10000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -895,7 +895,7 @@
       "nombre": "TINTO DE VERANO",
       "descripcion": "Vino tinto vermut rosso macerado con ciruela y durazno dash jugo de naranja frutas de estación gaseosa lima limón",
       "precio": 8000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     }
   ],
@@ -905,7 +905,7 @@
       "nombre": "DEVELADO SOLO CONTIGO",
       "descripcion": "CHARDONNAY/SAUVIGNON BLANC",
       "precio": 15000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -913,7 +913,7 @@
       "nombre": "KRONTIRAS MIKRON",
       "descripcion": "TORRONTES",
       "precio": 19000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -921,15 +921,15 @@
       "nombre": "ALFA CRUX CRUX",
       "descripcion": "SAUVIGNON BLANC",
       "precio": 17000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
       "id": 114,
       "nombre": "SALENTEIN",
-      "descripcion": "CHARDONNAY",
+      "descripcion": "CHARDONNAY, MALBEC, PINOT NOIR, SAUVIGNON BLANC",
       "precio": 16500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -937,7 +937,7 @@
       "nombre": "NUMINA",
       "descripcion": "CHARDONNAY",
       "precio": 22000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -945,7 +945,7 @@
       "nombre": "SALENTEIN",
       "descripcion": "MALBEC 375CC",
       "precio": 9900,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -953,7 +953,7 @@
       "nombre": "QUINDE",
       "descripcion": "NATURAL ORGANICO MALBEC",
       "precio": 18000,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     },
     {
@@ -961,7 +961,7 @@
       "nombre": "CAYETANA",
       "descripcion": "MALBEC",
       "precio": 27500,
-      "esVegano": true,
+      "esVegano": false,
       "sinTacc": false
     }
   ]

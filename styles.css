@@ -9,8 +9,8 @@
     --color-success: #4a4a4a;
 
     /* Typography */
-    --font-heading: 'Google Sans', sans-serif;
-    --font-body: 'Google Sans', sans-serif;
+    --font-heading: 'CenturyGothic', sans-serif;
+    --font-body: 'CenturyGothic', sans-serif;
 
     /* Spacing */
     --space-xs: 0.25rem;
@@ -18,6 +18,30 @@
     --space-md: 1rem;
     --space-lg: 2rem;
     --space-xl: 4rem;
+}
+
+@font-face {
+    font-family: 'BlissfulThinking';
+    src: url('src/fonts/Logo - BlissfulThinking.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+font-style: normal;
+}
+
+@font-face {
+    font-family: 'CenturyGothic';
+    src: url('src/fonts/centurygothic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'CenturyGothic';
+    src: url('src/fonts/centurygothic_bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
 }
 
 * {
@@ -54,8 +78,9 @@ h4 {
 }
 
 .brand-name {
+    font-family: 'BlissfulThinking', sans-serif;
     font-size: 2.5rem;
-    font-weight: 700;
+    font-weight: normal;
     letter-spacing: 0.05em;
     /* Reduced from 0.15em */
     margin-bottom: var(--space-sm);
