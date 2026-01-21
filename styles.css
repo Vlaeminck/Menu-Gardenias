@@ -375,6 +375,88 @@ h4 {
     display: none !important;
 }
 
-.no-scroll {
-    overflow: hidden;
+/* iOS Alert Style */
+.ios-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.ios-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ios-alert {
+    width: 270px;
+    background: rgba(245, 245, 245, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 14px;
+    text-align: center;
+    transform: scale(1.1);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.ios-overlay.show .ios-alert {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.ios-alert-content {
+    padding: 20px 16px 20px;
+}
+
+.ios-alert h3 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #000;
+    letter-spacing: -0.01em;
+}
+
+.ios-alert p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #000;
+    margin: 0;
+}
+
+.ios-alert-btn {
+    width: 100%;
+    border: none;
+    border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+    background: transparent;
+    padding: 12px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    /* Regular bold for OK button */
+    color: #007AFF;
+    /* iOS Blue */
+    cursor: pointer;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    transition: background-color 0.2s;
+}
+
+.ios-alert-btn:active {
+    background-color: rgba(0, 0, 0, 0.05);
 }

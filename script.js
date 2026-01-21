@@ -242,4 +242,27 @@ class MenuApp {
 
 document.addEventListener('DOMContentLoaded', () => {
     new MenuApp();
+
+    // iOS Alert Logic
+    const popupOverlay = document.getElementById('iosOverlay');
+    const closeBtn = document.getElementById('closePopup');
+
+    if (popupOverlay) {
+        // Show after 2 seconds
+        setTimeout(() => {
+            popupOverlay.classList.remove('hidden');
+            // Small delay to trigger transition
+            requestAnimationFrame(() => {
+                popupOverlay.classList.add('show');
+            });
+        }, 2000);
+
+        closeBtn.addEventListener('click', () => {
+            popupOverlay.classList.remove('show');
+            // Wait for transition end to hide display
+            setTimeout(() => {
+                popupOverlay.classList.add('hidden');
+            }, 300);
+        });
+    }
 }); 
