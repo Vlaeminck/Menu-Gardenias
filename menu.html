@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Menú digital de Gardenias - Experiencia gastronómica en Parque Leloir.">
+    <meta name="theme-color" content="#ffffff">
+    <title>Gardenias | Menú</title>
+
+    <!-- Fuentes: Fuentes locales usadas (BlissfulThinking, CenturyGothic) -->
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="index.html" class="back-to-landing" aria-label="Volver a sucursales">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Sucursales
+        </a>
+        <div class="logo-container">
+            <h1 class="brand-name">GARDENIAS</h1>
+            <p class="brand-location"><!-- set by JS --></p>
+        </div>
+        <div class="header-decoration">
+            <img src="src/img/logo-floral.png" alt="Gardenias Floral Logo" class="floral-icon">
+        </div>
+    </header>
+
+    <div class="sticky-nav-container">
+        <nav class="category-nav">
+            <ul class="category-list" id="categoryList">
+                <!-- Categorias insertadas por JS -->
+            </ul>
+        </nav>
+        <div class="search-container">
+            <div class="search-bar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Buscar en la carta...">
+            </div>
+        </div>
+    </div>
+
+    <main class="menu-content" id="productsContainer">
+        <!-- Productos insertados por JS -->
+    </main>
+
+    <footer class="main-footer">
+        <p>Somos historias, somos Gardenias.</p>
+        <div class="social-links">
+            <a href="https://linktr.ee/Gardeniasdelimarket" aria-label="Linktree">Acceder a Linktree</a>
+        </div>
+    </footer>
+
+
+    <div id="iosOverlay" class="ios-overlay hidden">
+        <div class="ios-alert">
+            <div class="ios-alert-content">
+                <h3>Horarios Especiales</h3>
+                <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de soda.
+                </p>
+            </div>
+            <button id="closePopup" class="ios-alert-btn">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

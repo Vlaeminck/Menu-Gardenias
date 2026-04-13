@@ -75,6 +75,33 @@ h4 {
     text-align: center;
     padding: var(--space-xl) var(--space-md) var(--space-lg);
     background-color: var(--color-bg);
+    position: relative;
+}
+
+/* Back to landing link */
+.back-to-landing {
+    position: absolute;
+    top: 1.25rem;
+    left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    text-decoration: none;
+    padding: 0.35rem 0.65rem;
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.back-to-landing:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-light);
+    background-color: var(--color-bg-alt);
 }
 
 .brand-name {

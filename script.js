@@ -1,5 +1,15 @@
+// Resolve branch from URL param, fallback to leloir
+const SUCURSALES = {
+    leloir:   { label: 'Parque Leloir', file: 'data/productos-leloir.json' },
+    castelar: { label: 'Castelar',      file: 'data/productos-castelar.json' },
+    pinamar:  { label: 'Pinamar',       file: 'data/productos-pinamar.json' }
+};
+
+const _urlParam = new URLSearchParams(window.location.search).get('sucursal') || 'leloir';
+const SUCURSAL  = SUCURSALES[_urlParam] || SUCURSALES['leloir'];
+
 const CONFIG = {
-    DATA_URL: 'data/productos.json',
+    DATA_URL: SUCURSAL.file,
     SELECTORS: {
         CATEGORY_LIST: 'categoryList',
         PRODUCTS_CONTAINER: 'productsContainer',
@@ -33,6 +43,10 @@ class MenuApp {
     }
 
     async init() {
+        // Inject branch name into header
+        const locEl = document.querySelector('.brand-location');
+        if (locEl) locEl.textContent = SUCURSAL.label.toUpperCase();
+
         await this.loadData();
         this.renderCategories();
         this.renderProducts('todos');
