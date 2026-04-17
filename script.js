@@ -5,6 +5,8 @@ const SUCURSALES = {
     pinamar:  { label: 'Pinamar',       file: 'data/productos-pinamar.json' }
 };
 
+const SHOW_EXTRA_POPUP = false; // Cambiar a true para mostrar el aviso de TACC en todas las sucursales
+
 const _urlParam = new URLSearchParams(window.location.search).get('sucursal') || 'leloir';
 const SUCURSAL  = SUCURSALES[_urlParam] || SUCURSALES['leloir'];
 
@@ -262,6 +264,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('closePopup');
 
     if (popupOverlay) {
+        // Activate correct branch popup content
+        const branchPopup = document.getElementById(`popup-${_urlParam}`);
+        if (branchPopup) {
+            branchPopup.classList.remove('hidden');
+        }
+
+        // Mostrar popup extra si está activado
+        if (SHOW_EXTRA_POPUP) {
+            const extraPopup = document.getElementById('popup-extra');
+            if (extraPopup) extraPopup.classList.remove('hidden');
+        }
+
         // Show after 2 seconds
         setTimeout(() => {
             popupOverlay.classList.remove('hidden');

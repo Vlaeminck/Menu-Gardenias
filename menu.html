@@ -23,7 +23,8 @@
 <body>
     <header class="main-header">
         <a href="index.html" class="back-to-landing" aria-label="Volver a sucursales">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
             Sucursales
@@ -66,14 +67,35 @@
         </div>
     </footer>
 
-
+    <!-- POPUPS ------------------------------------------------ -->
     <div id="iosOverlay" class="ios-overlay hidden">
         <div class="ios-alert">
-            <div class="ios-alert-content">
+            <!-- Popups individuales por sucursal -->
+            <div id="popup-leloir" class="ios-alert-content branch-popup hidden">
                 <h3>Horarios Especiales</h3>
                 <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de soda.
                 </p>
             </div>
+
+            <div id="popup-castelar" class="ios-alert-content branch-popup hidden">
+                <h3>Horarios Especiales</h3>
+                <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de soda.
+                </p>
+            </div>
+
+            <div id="popup-pinamar" class="ios-alert-content branch-popup hidden">
+                <h3>Horarios Especiales</h3>
+                <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de
+                    soda.
+                </p>
+            </div>
+
+            <!-- Popup extra (aviso general) -->
+            <div id="popup-extra" class="ios-alert-content hidden" style="border-top: 0.5px solid rgba(60, 60, 67, 0.29); margin-top: -10px;">
+                <p style="font-weight: 600; color: #ff3b30;">Aviso Importante</p>
+                <p>Nuestra cocina no tiene certificado sin TACC.</p>
+            </div>
+
             <button id="closePopup" class="ios-alert-btn">OK</button>
         </div>
     </div>
