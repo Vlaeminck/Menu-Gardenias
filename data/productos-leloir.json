@@ -1,968 +1,124 @@
 {
-  "Desayunos & Meriendas": [
-    {
-      "id": 1,
-      "nombre": "AMELIA QUERIDA",
-      "descripcion": "Tostadas con dips para untar",
-      "precio": 121200,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 2,
-      "nombre": "ELSITA",
-      "descripcion": "Bowl de frutas con yogur y granola",
-      "precio": 13000,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 3,
-      "nombre": "ROSA ROSA TAN MARAVILLOSA",
-      "descripcion": "Dos medialunas o una vinoisserie del día",
-      "precio": 6262,
-      "esVegano": true,
-      "sinTacc": true
-    },
-    {
-      "id": 4,
-      "nombre": "SARA DE LEJOS",
-      "descripcion": "Tostadas huevos revueltos y palta grillada",
-      "precio": 12625,
-      "esVegano": false,
-      "sinTacc": true
-    },
-    {
-      "id": 5,
-      "nombre": "PARA ANA CON AMOR",
-      "descripcion": "Dos medialuna con jyq dos tostaditos de jyq",
-      "precio": 9797,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 6,
-      "nombre": "AMADO JOAQUIN",
-      "descripcion": "Frutas quesos miel y almendras",
-      "precio": 13635,
-      "esVegano": false,
-      "sinTacc": true
-    },
-    {
-      "id": 7,
-      "nombre": "ADORADO FRAN",
-      "descripcion": "Pancakes con frutas pasta de maní y granola",
-      "precio": 12726,
-      "esVegano": true,
-      "sinTacc": true
-    },
-    {
-      "id": 8,
-      "nombre": "DIVINA LUCIA",
-      "descripcion": "Scon dulce con dips de curd de limón y mermelada",
-      "precio": 10605,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 9,
-      "nombre": "ALEGRE AGUSTIN",
-      "descripcion": "Tostada con puré de palta tomate fresco y palta",
-      "precio": 10605,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 10,
-      "nombre": "AMELITA DEL AMOR",
-      "descripcion": "Huevo escalfado en tomates cherry sal pimienta y aceite de oliva + tostada de pan de campo",
-      "precio": 10605,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 11,
-      "nombre": "GARDENIAS COMPARTE CON VOS",
-      "descripcion": "Dos infusiones porción de tarta brownie porción de budín dos mini copas de yogur scon de queso scon de hierbas con trucha ahumada dos mini toston de jamón crudo y queso brie",
-      "precio": 37875,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "DESAYUNOS & MERIENDAS": [
+    { "id": 101, "nombre": "ROSA ROSA TAN MARAVILLOSA", "descripcion": "Dos medialunas de manteca o delicia dulce", "precio": 8800 },
+    { "id": 102, "nombre": "AMELIA QUERIDA", "descripcion": "Tostadas con dips | gf", "precio": 13000 },
+    { "id": 103, "nombre": "PARA ANA CON AMOR", "descripcion": "Pan de molde blanco o de semillas | gluten free | árabe | una medialuna", "precio": 14500 },
+    { "id": 104, "nombre": "ELSITA", "descripcion": "Bowl de frutas con yogur & granola | gf", "precio": 17500 },
+    { "id": 105, "nombre": "SARA DE LEJOS", "descripcion": "Huevos revueltos, tomates frescos, palta & pan tostado | gf", "precio": 18700 },
+    { "id": 106, "nombre": "ADORADO FRAN", "descripcion": "Pancakes con frutas, pasta de maní & granola | gf", "precio": 18400 },
+    { "id": 107, "nombre": "ALEGRE AGUSTIN", "descripcion": "Tostada con puré de palta, tomate fresco, palta & huevo mollet", "precio": 15600 },
+    { "id": 108, "nombre": "AMADO JOAQUIN", "descripcion": "Frutas, quesos, miel & frutos secos | gf", "precio": 19900 },
+    { "id": 109, "nombre": "PARA ELISA", "descripcion": "Trucha ahumada, huevo soft, guacamole, hummus + tostada | gf", "precio": 19000 },
+    { "id": 110, "nombre": "DIVINA LUCIA", "descripcion": "Dos scones a elección", "precio": 14000 },
+    { "id": 111, "nombre": "PEQUEÑOS ARTISTAS", "descripcion": "1 alfajor o 2 tostaditos + 3 piezas para pintar + infusión", "precio": 16000 },
+    { "id": 112, "nombre": "DEGUSTACION DE TORTAS", "descripcion": "3 tortas a elección", "precio": 33000 },
+    { "id": 113, "nombre": "GARDENIAS COMPARTE CON VOS", "descripcion": "Dos infusiones, porción de tarta, brownie, scon dulce, scon de hierbas con trucha ahumada, dos alfajores, chipa relleno con j&q", "precio": 49800 }
   ],
-  "Adicionales": [
-    {
-      "id": 12,
-      "nombre": "TRUCHA AHUMADA",
-      "descripcion": "",
-      "precio": 6060,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 13,
-      "nombre": "JAMÓN CRUDO",
-      "descripcion": "",
-      "precio": 3535,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 14,
-      "nombre": "JAMÓN COCIDO Y QUESO",
-      "descripcion": "",
-      "precio": 3131,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 15,
-      "nombre": "PALTA",
-      "descripcion": "Media unidad",
-      "precio": 2828,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 16,
-      "nombre": "TOMATE",
-      "descripcion": "",
-      "precio": 1313,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 17,
-      "nombre": "ADICIONAL INFUSION",
-      "descripcion": "",
-      "precio": 2222,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 18,
-      "nombre": "DIP",
-      "descripcion": "Queso crema mermelada crud de limon ddll frutos secos",
-      "precio": 1414,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "TOSTADOS": [
+    { "id": 201, "nombre": "TOSTADOS CLASICOS", "descripcion": "Brioche | molde blanco | molde integral | árabe | sin gluten. Jamón & queso | quesos, albahaca & tomate | cebolla caramelizada", "precio": 10000 },
+    { "id": 202, "nombre": "CROQUE MADAME", "descripcion": "Pan brioche, relleno con jamón & queso, huevo jugoso & gratinado", "precio": 18500 }
   ],
-  "Delicias": [
-    {
-      "id": 19,
-      "nombre": "MEDIALUNA DE MANTECA",
-      "descripcion": "",
-      "precio": 1515,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 20,
-      "nombre": "MEDIALUNA CON JAMÓN Y QUESO",
-      "descripcion": "",
-      "precio": 3939,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 21,
-      "nombre": "VINNOISERIE DEL DIA",
-      "descripcion": "",
-      "precio": 4444,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 22,
-      "nombre": "VINNOISERIE RELLENA",
-      "descripcion": "",
-      "precio": 5555,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 23,
-      "nombre": "PORCION DE BUDIN",
-      "descripcion": "",
-      "precio": 4545,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 24,
-      "nombre": "DELICIA",
-      "descripcion": "Limón y amapolas",
-      "precio": 4545,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 25,
-      "nombre": "BROWNIE",
-      "descripcion": "Chocolate blanco o nuez",
-      "precio": 4545,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 26,
-      "nombre": "ALFAJOR",
-      "descripcion": "Almendra & ddl",
-      "precio": 3333,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 27,
-      "nombre": "COCOSO",
-      "descripcion": "Alfajor de coco y ddl",
-      "precio": 3333,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 28,
-      "nombre": "SCON DEL DIA",
-      "descripcion": "Queso hierbas o dulce",
-      "precio": 3838,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 29,
-      "nombre": "CHIPA",
-      "descripcion": "",
-      "precio": 2828,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 30,
-      "nombre": "COOKIE",
-      "descripcion": "Almendra chocolate & manteca",
-      "precio": 3737,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "ADICIONALES & RACIONES": [
+    { "id": 301, "nombre": "Trucha ahumada", "descripcion": "", "precio": 8200 },
+    { "id": 302, "nombre": "Jamón crudo", "descripcion": "", "precio": 5000 },
+    { "id": 303, "nombre": "Jamón cocido & queso", "descripcion": "Con tomates", "precio": 3500 },
+    { "id": 304, "nombre": "HUEVO Soft", "descripcion": "", "precio": 2500 },
+    { "id": 305, "nombre": "DIP variado", "descripcion": "Hummus | queso crema | mermelada | guacamole | manteca | curd", "precio": 2500 }
   ],
-  "Postres & Tortas": [
-    {
-      "id": 31,
-      "nombre": "FRUTOS ROJOS CON CREMA PASTELERA",
-      "descripcion": "Tarta",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 32,
-      "nombre": "FROLA",
-      "descripcion": "Sablé de manteca relleno de membrillo y f. rojos",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 33,
-      "nombre": "LEMON BIEN NUESTRA",
-      "descripcion": "Tarta",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 34,
-      "nombre": "CRUMBLE DE MANZANAS Y ALMENDRAS",
-      "descripcion": "Tarta",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 35,
-      "nombre": "KEY LIME PIE",
-      "descripcion": "Tarta",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 36,
-      "nombre": "CUADRADO DE COCO CON DDL",
-      "descripcion": "",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 37,
-      "nombre": "CHEESE DE LIMON CON FRUTOS DEL BOSQUE",
-      "descripcion": "Torta",
-      "precio": 7777,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 38,
-      "nombre": "CHOCOTORTA GDS",
-      "descripcion": "Bizcocho de chocolate chocolinas mousse de ddl y queso",
-      "precio": 7777,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 39,
-      "nombre": "ROGEL",
-      "descripcion": "Torta",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 40,
-      "nombre": "GOLOSA",
-      "descripcion": "Base brownie ddl y crema",
-      "precio": 7777,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 41,
-      "nombre": "BALCARCE",
-      "descripcion": "Bizcocho de vainilla merengue ddl crema nueces y coco",
-      "precio": 7777,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 42,
-      "nombre": "DEGUSTACION DE TORTAS",
-      "descripcion": "Tres tortas o tartas a elección",
-      "precio": 19695,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 43,
-      "nombre": "FLAN DE ANA CON DDL",
-      "descripcion": "",
-      "precio": 7070,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 44,
-      "nombre": "VOLCAN DE CHOCOLATE",
-      "descripcion": "Con helado de crema & salsa de frutos rojos",
-      "precio": 9090,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 45,
-      "nombre": "VOLCAN DE DULCE DE LECHE",
-      "descripcion": "Con salsa inglesa & helado",
-      "precio": 9090,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 46,
-      "nombre": "BROWNIE DE CHOCOLATE",
-      "descripcion": "Con helado crema salsa de frutos rojos",
-      "precio": 9090,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 47,
-      "nombre": "ENSALADA DE FRUTAS",
-      "descripcion": "",
-      "precio": 7070,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 48,
-      "nombre": "COPA DE HELADO",
-      "descripcion": "Americana una bocha",
-      "precio": 3131,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 49,
-      "nombre": "BUDIN DE PAN COCO CON CREMA",
-      "descripcion": "",
-      "precio": 7272,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 50,
-      "nombre": "CRUMBLE TIBIO DE MANZANA",
-      "descripcion": "Con curd de limon o helado de crema",
-      "precio": 8585,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 51,
-      "nombre": "POSTRE DEL DIA",
-      "descripcion": "",
-      "precio": 7575,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "DELICIAS DULCES & SALADAS": [
+    { "id": 401, "nombre": "Alfajores / Budín / Scons / Cookies", "descripcion": "Piezas individuales", "precio": 5500 },
+    { "id": 402, "nombre": "Medialuna rellena / Viennoiserie simple / Chipa", "descripcion": "", "precio": 5000 },
+    { "id": 403, "nombre": "Viennoiserie rellena / Brownies / Hojaldres", "descripcion": "", "precio": 6000 },
+    { "id": 404, "nombre": "Medialuna de manteca", "descripcion": "", "precio": 2900 }
   ],
-  "Platitos & Picadas": [
-    {
-      "id": 52,
-      "nombre": "EMPANADAS FRITAS",
-      "descripcion": "De carne cortada a cuchillo",
-      "precio": 3030,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 53,
-      "nombre": "TABLA DE FIAMBRES Y QUESOS CHICA",
-      "descripcion": "",
-      "precio": 21210,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 54,
-      "nombre": "TABLA DE FIAMBRES Y QUESOS GRANDE",
-      "descripcion": "",
-      "precio": 38885,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 55,
-      "nombre": "PICOTEO",
-      "descripcion": "Quesos miel y frutos secos",
-      "precio": 19695,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 56,
-      "nombre": "PAPAS RUSTICAS",
-      "descripcion": "Con alioli",
-      "precio": 8282,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 57,
-      "nombre": "BERENJENAS FRITAS",
-      "descripcion": "Con miel y queso",
-      "precio": 8282,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 58,
-      "nombre": "MONTADITO STRIACCIATELLA",
-      "descripcion": "Con mortadela",
-      "precio": 7777,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 59,
-      "nombre": "MONTADITO PALTA",
-      "descripcion": "Con tomates frescos",
-      "precio": 7777,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 60,
-      "nombre": "QUESITO BRIE",
-      "descripcion": "Oliva nueces picadas frutas de estación miel en panal",
-      "precio": 8888,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 61,
-      "nombre": "LANGOSTINOS",
-      "descripcion": "Rebozados acompañados de salsa cítrica",
-      "precio": 16160,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 62,
-      "nombre": "QUESOS & FRUTAS",
-      "descripcion": "De estación",
-      "precio": 19190,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 63,
-      "nombre": "CAMEMBERT GRATINADO",
-      "descripcion": "Miel rúcula frutas de estación",
-      "precio": 14140,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 64,
-      "nombre": "DURAZNOS GRATINADOS",
-      "descripcion": "Tomates confitados & striaccatella",
-      "precio": 14140,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 65,
-      "nombre": "BURRATINA",
-      "descripcion": "Tomates asados tomates secos & jamón parma",
-      "precio": 21210,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "TARTAS & TORTAS": [
+    { "id": 501, "nombre": "TARTAS", "descripcion": "Elegí de nuestra heladera", "precio": 9500 },
+    { "id": 502, "nombre": "PORCION TORTA", "descripcion": "La más rica de la heladera", "precio": 11000 }
   ],
-  "Tostones": [
-    {
-      "id": 66,
-      "nombre": "ALCANFOR",
-      "descripcion": "Queso brie tomates confitados jamón crudo y rúcula",
-      "precio": 17170,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 67,
-      "nombre": "GARDENIAS",
-      "descripcion": "Crema de palta trucha ahumada rúcula y tomates Cherry",
-      "precio": 22725,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 68,
-      "nombre": "LAVANDA",
-      "descripcion": "Vegetales grillados queso azul y garrapiñada",
-      "precio": 14443,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 69,
-      "nombre": "CROQUE MADAMME",
-      "descripcion": "Super tostado de jamón y queso salsa blanca gratín de parmesano y huevo",
-      "precio": 14443,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 70,
-      "nombre": "CIRUELO",
-      "descripcion": "Pollo crema de palta zucchinis grillados y portobello",
-      "precio": 15150,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 71,
-      "nombre": "DEGUSTACION DE TOSTONES",
-      "descripcion": "Cuatro mini tostones con papas: alcanfor - lavanda - gardenias - ciruelo (2 personas)",
-      "precio": 39390,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "SCON DE HIERBAS RELLENO": [
+    { "id": 601, "nombre": "Relleno Trucha ahumada", "descripcion": "Con queso crema de hierbas & ciboulette", "precio": 12600 },
+    { "id": 602, "nombre": "Relleno Jamón y Queso", "descripcion": "Jamón cocido, queso & tomatitos confitados", "precio": 11500 },
+    { "id": 603, "nombre": "Relleno Vegetariano", "descripcion": "Tomates secos, brie & rúcula", "precio": 10400 }
   ],
-  "Ensaladas": [
-    {
-      "id": 72,
-      "nombre": "ZORZAL",
-      "descripcion": "Tibio de arroz integral vegetales grillados garrapiñada y queso parmesano o tofu",
-      "precio": 13635,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 73,
-      "nombre": "CALANDRIA",
-      "descripcion": "Pollo verdes queso croutones y aderezo césar",
-      "precio": 15352,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 74,
-      "nombre": "PICAFLOR CON TRUCHA O LANGOSTINOS",
-      "descripcion": "Palta cherry fruta de estación queso azul mix de verdes y rúcula",
-      "precio": 21210,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 75,
-      "nombre": "PICAFLOR CON TOFU",
-      "descripcion": "Palta cherry fruta de estación queso azul mix de verdes y rúcula",
-      "precio": 16160,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 76,
-      "nombre": "GARZA",
-      "descripcion": "Colchón de rúcula burratina tomates secos frescos y caramelizados jamón crudo y aceite de albahaca",
-      "precio": 21210,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 77,
-      "nombre": "GAVIOTA",
-      "descripcion": "Hummus de zanahoria tomates vegetales grillados olivas y brotes",
-      "precio": 15150,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "PARA PICOTEAR": [
+    { "id": 701, "nombre": "EMPANADAS", "descripcion": "Fritas de carne cortada a cuchillo (unidad)", "precio": 4000 },
+    { "id": 702, "nombre": "BERENJENAS", "descripcion": "Fritas con miel & queso de cabra", "precio": 15200 },
+    { "id": 703, "nombre": "PAPAS rusticas", "descripcion": "Con alioli", "precio": 11600 },
+    { "id": 704, "nombre": "BURRATA", "descripcion": "Zanahorias asadas, tomates asados & secos, rúcula + gremolata", "precio": 30000 },
+    { "id": 705, "nombre": "TOSTADA con palta", "descripcion": "Tomates y huevo", "precio": 10000 },
+    { "id": 706, "nombre": "TRUCHA AHUMADA Ración", "descripcion": "Huevo soft, guacamole & hummus", "precio": 16000 },
+    { "id": 707, "nombre": "PICOTEO de quesos", "descripcion": "Miel, frutos secos", "precio": 26800 },
+    { "id": 708, "nombre": "SOPA DE ANITA", "descripcion": "Sopita del día", "precio": 10000 }
   ],
-  "Carnes": [
-    {
-      "id": 78,
-      "nombre": "OMELETTE DE LANGOSTINOS",
-      "descripcion": "Y sardo con guarnición de verdes",
-      "precio": 19190,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 79,
-      "nombre": "BONDIOLA LAQUEADA",
-      "descripcion": "Sobre puré de batatas y batatas crispy",
-      "precio": 21715,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 80,
-      "nombre": "MILANESA DE SUPREMA",
-      "descripcion": "Con cordones cacio e pepe",
-      "precio": 17776,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 81,
-      "nombre": "POLLO GRILLADO",
-      "descripcion": "Con crema de verdeo y guarnición",
-      "precio": 16665,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 82,
-      "nombre": "OJO DE BIFE GRILLADO",
-      "descripcion": "En reducción de malbec y guarnición",
-      "precio": 27270,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 83,
-      "nombre": "LOMO DE TRUCHA GRILLADA",
-      "descripcion": "Trucha patagonica con papas rústicas con crema",
-      "precio": 25755,
-      "esVegano": true,
-      "sinTacc": false
-    },
-    {
-      "id": 84,
-      "nombre": "PESCA DEL DIA",
-      "descripcion": "Gratinada con queso y crema con guarnición a elección",
-      "precio": 20200,
-      "esVegano": true,
-      "sinTacc": false
-    }
+  "TOSTONES": [
+    { "id": 801, "nombre": "ALCANFOR", "descripcion": "Queso brie, tomates confitados, jamón crudo y rúcula", "precio": 22000 },
+    { "id": 802, "nombre": "GARDENIAS", "descripcion": "Crema de palta, trucha ahumada, rúcula y tomates Cherry", "precio": 26000 },
+    { "id": 803, "nombre": "LAVANDA", "descripcion": "Vegetales grillados, queso azul y garrapiñada", "precio": 18500 },
+    { "id": 804, "nombre": "TOSTON CROQUE MADAME", "descripcion": "Estilo Gardenias", "precio": 18500 }
   ],
-  "Bebidas": [
-    {
-      "id": 85,
-      "nombre": "GASEOSAS",
-      "descripcion": "Línea coca cola",
-      "precio": 3232,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 86,
-      "nombre": "AGUA AQA",
-      "descripcion": "Con gas - sin gas",
-      "precio": 2525,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 87,
-      "nombre": "AQUARIUS",
-      "descripcion": "Pera - manzana – pomelo",
-      "precio": 2828,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 88,
-      "nombre": "LIMONADA",
-      "descripcion": "Con menta y jengibre",
-      "precio": 4545,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 89,
-      "nombre": "POMELADA",
-      "descripcion": "",
-      "precio": 4545,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 90,
-      "nombre": "LICUADO",
-      "descripcion": "Multifruta o hasta dos frutas con agua leche o jugo",
-      "precio": 5050,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 91,
-      "nombre": "FROZZEN",
-      "descripcion": "De naranja & maracuya",
-      "precio": 5050,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 92,
-      "nombre": "EXPRIMIDO DE NARANJA",
-      "descripcion": "",
-      "precio": 4545,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 93,
-      "nombre": "MOCKTAIL UNO",
-      "descripcion": "Durazno frutilla naranja menta y jengibre",
-      "precio": 5555,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 94,
-      "nombre": "MOCKTAIL DOS",
-      "descripcion": "Lima hibiscus frutos rojos pomelo & soda",
-      "precio": 5555,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 95,
-      "nombre": "CAFE ESPRESSO",
-      "descripcion": "Chico cortado o con crema",
-      "precio": 3131,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 96,
-      "nombre": "CAFE LATTE",
-      "descripcion": "",
-      "precio": 4646,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 97,
-      "nombre": "SUBMARINO",
-      "descripcion": "Chocolate y canela",
-      "precio": 5050,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 98,
-      "nombre": "ICED COFFEE",
-      "descripcion": "",
-      "precio": 5050,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 99,
-      "nombre": "ICED TEA",
-      "descripcion": "Té negro o té rojo CuraTé Alma jugo de lima jengibre miel",
-      "precio": 5050,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 100,
-      "nombre": "TE NEGRO EN HEBRAS",
-      "descripcion": "",
-      "precio": 3939,
-      "esVegano": false,
-      "sinTacc": false
-    }
+  "ENSALADAS": [
+    { "id": 901, "nombre": "ZORZAL", "descripcion": "Arroz integral, vegetales grillados, garrapiñada y parmesano", "precio": 19000 },
+    { "id": 902, "nombre": "CALANDRIA", "descripcion": "Pollo, verdes, queso, croutones y aderezo césar", "precio": 22000 },
+    { "id": 903, "nombre": "PICAFLOR", "descripcion": "Palta, cherry, fruta de estación, queso azul, mix de verdes y trucha", "precio": 30000 }
   ],
-  "Tragos": [
-    {
-      "id": 101,
-      "nombre": "MEDIA PINTA STELLA",
-      "descripcion": "",
-      "precio": 4040,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 102,
-      "nombre": "PORRON CORONA",
-      "descripcion": "",
-      "precio": 5252,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 103,
-      "nombre": "APEROL SPRITZ",
-      "descripcion": "Aperol espumante golpe de soda",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 104,
-      "nombre": "CYNAR JULEP",
-      "descripcion": "Cynar menta y jugo de pomelo",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 105,
-      "nombre": "MOJITO",
-      "descripcion": "Ron menta lima azúcar soda",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 106,
-      "nombre": "CAMPARI ORANGE",
-      "descripcion": "Campari jugo de naranja",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 107,
-      "nombre": "FERNET BRANCA",
-      "descripcion": "Con coca cola",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 108,
-      "nombre": "GIN TONIC",
-      "descripcion": "",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 109,
-      "nombre": "GIN TONIC BOMBAY SAPHIRE",
-      "descripcion": "",
-      "precio": 10100,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 110,
-      "nombre": "TINTO DE VERANO",
-      "descripcion": "Vino tinto vermut rosso macerado con ciruela y durazno dash jugo de naranja frutas de estación gaseosa lima limón",
-      "precio": 8080,
-      "esVegano": false,
-      "sinTacc": false
-    }
+  "PAPA ROSTI": [
+    { "id": 1001, "nombre": "HONGOS", "descripcion": "Stracciatella y ralladura limón | gf", "precio": 28500 },
+    { "id": 1002, "nombre": "TRUCHA AHUMADA ROSTI", "descripcion": "Ciboulette y huevo poche | gf", "precio": 34000 }
   ],
-  "Vinos": [
-    {
-      "id": 111,
-      "nombre": "DEVELADO SOLO CONTIGO",
-      "descripcion": "CHARDONNAY/SAUVIGNON BLANC",
-      "precio": 15150,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 112,
-      "nombre": "KRONTIRAS MIKRON",
-      "descripcion": "TORRONTES",
-      "precio": 19190,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 113,
-      "nombre": "ALFA CRUX CRUX",
-      "descripcion": "SAUVIGNON BLANC",
-      "precio": 17170,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 114,
-      "nombre": "SALENTEIN",
-      "descripcion": "CHARDONNAY, MALBEC, PINOT NOIR, SAUVIGNON BLANC",
-      "precio": 16665,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 115,
-      "nombre": "NUMINA",
-      "descripcion": "CHARDONNAY",
-      "precio": 22220,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 116,
-      "nombre": "SALENTEIN",
-      "descripcion": "MALBEC 375CC",
-      "precio": 9999,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 117,
-      "nombre": "QUINDE",
-      "descripcion": "NATURAL ORGANICO MALBEC",
-      "precio": 18180,
-      "esVegano": false,
-      "sinTacc": false
-    },
-    {
-      "id": 118,
-      "nombre": "CAYETANA",
-      "descripcion": "MALBEC",
-      "precio": 27775,
-      "esVegano": false,
-      "sinTacc": false
-    }
+  "PRINCIPALES": [
+    { "id": 1101, "nombre": "OMELETTE", "descripcion": "Jamón y queso | cebolla, hongos & queso | vegetales & queso", "precio": 25000 },
+    { "id": 1102, "nombre": "ROLL", "descripcion": "Acelga orgánica, salteado con hongos, salsa Bechamel & queso", "precio": 24000 },
+    { "id": 1103, "nombre": "PESCA A LA PLANCHA", "descripcion": "Limón, alcaparras & vegetales de otoño asados", "precio": 31500 },
+    { "id": 1104, "nombre": "BIFE GRILLADO", "descripcion": "Manteca de hierbas, papines, hongos & zanahorias dulces", "precio": 34000 },
+    { "id": 1105, "nombre": "MUSLITOS DE POLLO", "descripcion": "Especiados, cebollas rojas asadas al ceto, ensaladita", "precio": 26000 },
+    { "id": 1106, "nombre": "SUPREMA DE POLLO", "descripcion": "Con panko, queso brie, albahaca, tomates & puré aligot", "precio": 26000 },
+    { "id": 1107, "nombre": "ROTOLO", "descripcion": "Jamón & queso con salsa de tomates, albahaca & crema", "precio": 24000 },
+    { "id": 1108, "nombre": "MINI GARDENIOS", "descripcion": "Pollito rebozado con puré de papas", "precio": 17500 }
+  ],
+  "OLLITAS": [
+    { "id": 1201, "nombre": "CAZUELA de pollo", "descripcion": "Al verdeo con arroz al limón", "precio": 26000 },
+    { "id": 1202, "nombre": "CAZUELA de PARMENTIER", "descripcion": "De ternera", "precio": 29000 },
+    { "id": 1203, "nombre": "MUSAKA de cordero", "descripcion": "Solo los fines de semana", "precio": 31000 },
+    { "id": 1204, "nombre": "CAVATELLI con mariscos", "descripcion": "", "precio": 32000 },
+    { "id": 1205, "nombre": "POLLO AL CURRY", "descripcion": "", "precio": 26000 },
+    { "id": 1206, "nombre": "GUISO DE LENTEJAS", "descripcion": "", "precio": 26000 },
+    { "id": 1207, "nombre": "GUISO DE QUINOA", "descripcion": "Veggie", "precio": 24000 }
+  ],
+  "MENU EJECUTIVO": [
+    { "id": 1301, "nombre": "MENU COMPLETO EFECTIVO", "descripcion": "Plato + Bebida + Postre o Café (Lunes a Viernes)", "precio": 23000 },
+    { "id": 1302, "nombre": "MENU OTROS MEDIOS", "descripcion": "Plato + Bebida + Postre o Café (Lunes a Viernes)", "precio": 25500 }
+  ],
+  "POSTRES": [
+    { "id": 1401, "nombre": "PAVLOVA", "descripcion": "Crema de limón & frutos rojos", "precio": 10000 },
+    { "id": 1402, "nombre": "TORTAS & TARTAS", "descripcion": "Elegí de la heladera", "precio": 11600 }
+  ],
+  "BEBIDAS SIN ALCOHOL": [
+    { "id": 1501, "nombre": "Agua con/sin gas", "descripcion": "", "precio": 5000 },
+    { "id": 1502, "nombre": "Gaseosas Línea Coca", "descripcion": "", "precio": 5000 },
+    { "id": 1503, "nombre": "Corona 0% sin alcohol", "descripcion": "", "precio": 5000 },
+    { "id": 1504, "nombre": "Limonada / Pomelada / Maracuyá", "descripcion": "500cc", "precio": 6900 },
+    { "id": 1505, "nombre": "Licuados", "descripcion": "", "precio": 7700 },
+    { "id": 1506, "nombre": "Exprimido naranja", "descripcion": "", "precio": 6900 },
+    { "id": 1507, "nombre": "MOCKTAILS", "descripcion": "Opciones Uno o Dos", "precio": 9000 }
+  ],
+  "INFUSIONES": [
+    { "id": 1601, "nombre": "Espressos & Jarritos", "descripcion": "Ristretto | espresso | cortados | lagrima", "precio": 4900 },
+    { "id": 1602, "nombre": "Dobles & Latte", "descripcion": "Latte | capu | submarino", "precio": 6000 },
+    { "id": 1603, "nombre": "Fríos", "descripcion": "Frappus | iced coffe | iced tea", "precio": 6500 },
+    { "id": 1604, "nombre": "Té en hebras", "descripcion": "Negro o Curate Alma", "precio": 7000 }
+  ],
+  "CON ALCOHOL": [
+    { "id": 1701, "nombre": "Porrón Stella / Corona", "descripcion": "", "precio": 8000 },
+    { "id": 1702, "nombre": "Cerveza Michelov", "descripcion": "Sin TACC", "precio": 7000 },
+    { "id": 1703, "nombre": "Tragos", "descripcion": "Aperol | Campari | Gin Tonic | Fernet", "precio": 13000 }
+  ],
+  "VINOS": [
+    { "id": 1801, "nombre": "Copa de vino SALENTEIN", "descripcion": "", "precio": 12000 },
+    { "id": 1802, "nombre": "Vinos SALENTEIN Reserva", "descripcion": "Malbec | Pinot | Sauvignon Blanc | Chardonnay | Cabernet", "precio": 23000 },
+    { "id": 1803, "nombre": "NUMINA", "descripcion": "Malbec | Chardonnay | Cabernet Sauvignon", "precio": 34000 },
+    { "id": 1804, "nombre": "RUTINI", "descripcion": "Cabernet Franc | Malbec", "precio": 36000 },
+    { "id": 1805, "nombre": "Vinos Especiales", "descripcion": "Abismal | Biplano | Ricomenciare", "precio": 29000 },
+    { "id": 1806, "nombre": "SALENTEIN LA PAMPA", "descripcion": "Malbec '97", "precio": 48000 },
+    { "id": 1807, "nombre": "ESPUMANTE SALENTEIN", "descripcion": "Brut Nature / Extra Brut", "precio": 30000 }
   ]
 }

@@ -11,10 +11,32 @@ if (typeof firebase !== 'undefined') {
 const database = typeof firebase !== 'undefined' ? firebase.database() : null;
 
 const BRANCHES = {
-    leloir:   { label: 'Parque Leloir', file: 'data/productos-leloir.json' },
-    castelar: { label: 'Castelar',      file: 'data/productos-castelar.json' },
-    pinamar:  { label: 'Pinamar',       file: 'data/productos-pinamar.json' }
+    leloir:   { label: 'Parque Leloir', file: '/data/productos-leloir.json' },
+    castelar: { label: 'Castelar',      file: '/data/productos-castelar.json' },
+    pinamar:  { label: 'Pinamar',       file: '/data/productos-pinamar.json' }
 };
+
+// Orden maestro de categorías (mismo que en script.js)
+const CATEGORY_ORDER = [
+    "DESAYUNOS & MERIENDAS",
+    "TOSTADOS",
+    "ADICIONALES & RACIONES",
+    "DELICIAS DULCES & SALADAS",
+    "TARTAS & TORTAS",
+    "SCON DE HIERBAS RELLENO",
+    "PARA PICOTEAR",
+    "TOSTONES",
+    "ENSALADAS",
+    "PAPA ROSTI",
+    "PRINCIPALES",
+    "OLLITAS",
+    "MENU EJECUTIVO",
+    "POSTRES",
+    "BEBIDAS SIN ALCOHOL",
+    "INFUSIONES",
+    "CON ALCOHOL",
+    "VINOS"
+];
 
 class AdminApp {
     constructor() {
@@ -32,10 +54,33 @@ class AdminApp {
         this.btnSave       = document.getElementById('btnSave');
         this.btnRevert     = document.getElementById('btnRevert');
         this.btnBulkAdjust = document.getElementById('btnBulkAdjust');
+        this.btnSyncLocal  = document.getElementById('btnSyncLocal');
         this.btnChanges    = document.getElementById('btnChangesCount');
         this.changesBadge  = document.getElementById('changesCountBadge');
 
-        this.init();
+        this.checkAuth();
+    }
+
+    checkAuth() {
+        if (!firebase.auth) {
+            console.error('Firebase Auth no cargado');
+            return;
+        }
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                // No logueado -> Redirigir al login (que estará 2 niveles arriba)
+                window.location.href = '../../login.html';
+            } else {
+                // Logueado -> Quitar escudo y cargar datos
+                const shield = document.getElementById('authShield');
+                if (shield) {
+                    shield.style.opacity = '0';
+                    setTimeout(() => shield.remove(), 400);
+                }
+                this.init();
+            }
+        });
     }
 
     async init() {
@@ -93,6 +138,41 @@ class AdminApp {
         }
     }
 
+    /**
+     * Forzar la recarga de datos desde los archivos JSON locales
+     * y subirlos a Firebase sobreescribiendo lo que haya.
+     */
+    async forceSyncFromLocal() {
+        if (!confirm('¿Sobreescribir Firebase con los datos de los archivos JSON locales?')) return;
+
+        this.loadingEl.classList.remove('hidden');
+        this.contentEl.innerHTML = '';
+
+        try {
+            const entries = Object.entries(BRANCHES);
+            for (const [key, branch] of entries) {
+                console.log(`Sincronizando ${key}...`);
+                const res = await fetch(branch.file + '?t=' + Date.now()); // Bypass cache
+                const data = await res.json();
+                
+                if (database) {
+                    await database.ref(`sucursales/${key}`).set(data);
+                }
+                
+                this.branchData[key] = data;
+                this.originalData[key] = JSON.parse(JSON.stringify(data));
+            }
+            
+            this.showToast('✅ Firebase sincronizado con archivos locales');
+            this.render(this.searchInput.value);
+        } catch (err) {
+            console.error('Error en sincronización:', err);
+            this.showToast('❌ Error al sincronizar');
+        } finally {
+            this.loadingEl.classList.add('hidden');
+        }
+    }
+
     getCurrentData() {
         return this.branchData[this.activeBranch] || {};
     }
@@ -118,15 +198,18 @@ class AdminApp {
             return;
         }
 
-        const term = searchTerm.toLowerCase().trim();
+        const sortedCats = CATEGORY_ORDER.filter(c => categories.includes(c));
+        categories.forEach(c => {
+            if (!sortedCats.includes(c)) sortedCats.push(c);
+        });
+
         let html = '';
         let anyResults = false;
+        const term = searchTerm.toLowerCase().trim();
 
-        categories.forEach(cat => {
-            const products = data[cat];
-            if (!products || products.length === 0) return;
-
-            // Filter by search
+        for (const cat of sortedCats) {
+            const products = data[cat] || [];
+            
             const filtered = term
                 ? products.filter(p =>
                     p.nombre.toLowerCase().includes(term) ||
@@ -134,7 +217,7 @@ class AdminApp {
                   )
                 : products;
 
-            if (filtered.length === 0) return;
+            if (filtered.length === 0) continue;
             anyResults = true;
 
             const isOpen = this.openCategories.has(cat) || !!term;
@@ -157,7 +240,7 @@ class AdminApp {
                         </div>
                     </div>
                 </div>`;
-        });
+        }
 
         if (!anyResults) {
             html = `<div class="no-results-admin"><p>No se encontraron productos con "${searchTerm}".</p></div>`;
@@ -168,8 +251,12 @@ class AdminApp {
     }
 
     renderProductRow(product, category) {
-        const original = this.getOriginalPrice(product.id, category);
-        const changed  = original !== null && original !== product.precio;
+        const original = this.getOriginalProduct(product.id, category);
+        
+        const hasPriceChange = original && original.precio !== product.precio;
+        const hasDietChange  = original && (original.veggie !== product.veggie || original.glutenFree !== product.glutenFree);
+        const hasTextChange  = original && (original.nombre !== product.nombre || original.descripcion !== product.descripcion);
+        const changed = hasPriceChange || hasDietChange || hasTextChange;
 
         return `
             <div class="product-row ${changed ? 'changed' : ''}" data-id="${product.id}" data-category="${category}">
@@ -177,26 +264,50 @@ class AdminApp {
                     <div class="row-name" title="${product.nombre}">${product.nombre}</div>
                     ${product.descripcion ? `<div class="row-desc" title="${product.descripcion}">${product.descripcion}</div>` : ''}
                 </div>
+                
+                <div class="row-diet-toggles">
+                    <label class="diet-toggle veggie" title="Veggie">
+                        <input type="checkbox" class="diet-input" data-type="veggie" 
+                               data-id="${product.id}" data-category="${category}"
+                               ${product.veggie ? 'checked' : ''}>
+                        <div class="diet-switch"></div>
+                        <span class="diet-label">VEG</span>
+                    </label>
+                    <label class="diet-toggle gf" title="Sin TACC">
+                        <input type="checkbox" class="diet-input" data-type="glutenFree" 
+                               data-id="${product.id}" data-category="${category}"
+                               ${product.glutenFree ? 'checked' : ''}>
+                        <div class="diet-switch"></div>
+                        <span class="diet-label">GF</span>
+                    </label>
+                </div>
+
                 <div class="row-price">
-                    <span class="price-original"${changed ? '' : ' style="display:none"'}>$${original !== null ? original.toLocaleString('es-AR') : ''}</span>
+                    <span class="price-original"${hasPriceChange ? '' : ' style="display:none"'}>$${original ? original.precio.toLocaleString('es-AR') : ''}</span>
                     <div class="price-input-wrap">
                         <span class="price-prefix">$</span>
-                        <input type="number" class="price-input ${changed ? 'modified' : ''}"
+                        <input type="number" class="price-input ${hasPriceChange ? 'modified' : ''}"
                                value="${product.precio}"
                                data-id="${product.id}"
                                data-category="${category}"
-                               min="0" step="100"
-                               aria-label="Precio de ${product.nombre}">
+                               min="0" step="100">
                     </div>
                 </div>
+
+                <button class="btn-options" data-id="${product.id}" data-category="${category}" title="Editar nombre y descripción">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </button>
             </div>`;
     }
 
-    getOriginalPrice(productId, category) {
+    getOriginalProduct(productId, category) {
         const origCat = this.getOriginalData()[category];
         if (!origCat) return null;
-        const origProduct = origCat.find(p => p.id === productId);
-        return origProduct ? origProduct.precio : null;
+        return origCat.find(p => p.id === productId) || null;
     }
 
     /* ──────────────────────────────────────────────
@@ -213,7 +324,17 @@ class AdminApp {
                 const origProds = original[cat] || [];
                 curProds.forEach(p => {
                     const orig = origProds.find(op => op.id === p.id);
-                    if (orig && orig.precio !== p.precio) count++;
+                    if (orig) {
+                        if (orig.precio !== p.precio || 
+                            orig.veggie !== p.veggie || 
+                            orig.glutenFree !== p.glutenFree ||
+                            orig.nombre !== p.nombre ||
+                            orig.descripcion !== p.descripcion) {
+                            count++;
+                        }
+                    } else {
+                        count++;
+                    }
                 });
             }
         }
@@ -259,55 +380,46 @@ class AdminApp {
             this.render();
         });
 
-        // Category toggle (accordion)
+        // Delegate content events
         this.contentEl.addEventListener('click', (e) => {
+            // Category Toggle
             const toggle = e.target.closest('.category-toggle');
-            if (!toggle) return;
+            if (toggle) {
+                const cat = toggle.dataset.cat;
+                const section = toggle.closest('.admin-category');
+                if (this.openCategories.has(cat)) {
+                    this.openCategories.delete(cat);
+                    section.classList.remove('open');
+                } else {
+                    this.openCategories.add(cat);
+                    section.classList.add('open');
+                }
+                return;
+            }
 
-            const cat = toggle.dataset.cat;
-            const section = toggle.closest('.admin-category');
-
-            if (this.openCategories.has(cat)) {
-                this.openCategories.delete(cat);
-                section.classList.remove('open');
-            } else {
-                this.openCategories.add(cat);
-                section.classList.add('open');
+            // Options Button
+            const optBtn = e.target.closest('.btn-options');
+            if (optBtn) {
+                this.openEditProductModal(parseInt(optBtn.dataset.id, 10), optBtn.dataset.category);
             }
         });
 
-        // Price input change
         this.contentEl.addEventListener('input', (e) => {
-            if (!e.target.classList.contains('price-input')) return;
-
-            const id       = parseInt(e.target.dataset.id, 10);
-            const category = e.target.dataset.category;
-            const newPrice = parseInt(e.target.value, 10) || 0;
-
-            // Update data
-            const products = this.getCurrentData()[category];
-            if (products) {
-                const product = products.find(p => p.id === id);
-                if (product) {
-                    product.precio = newPrice;
-                }
+            if (e.target.classList.contains('price-input')) {
+                const id = parseInt(e.target.dataset.id, 10);
+                const category = e.target.dataset.category;
+                const newPrice = parseInt(e.target.value, 10) || 0;
+                this.updateProductProperty(id, category, 'precio', newPrice);
             }
+        });
 
-            // Update row visual
-            const row = e.target.closest('.product-row');
-            const original = this.getOriginalPrice(id, category);
-            const changed  = original !== null && original !== newPrice;
-
-            row.classList.toggle('changed', changed);
-            e.target.classList.toggle('modified', changed);
-
-            const origSpan = row.querySelector('.price-original');
-            if (origSpan) {
-                origSpan.style.display = changed ? 'inline' : 'none';
-                origSpan.textContent = `$${original !== null ? original.toLocaleString('es-AR') : ''}`;
+        this.contentEl.addEventListener('change', (e) => {
+            if (e.target.classList.contains('diet-input')) {
+                const id = parseInt(e.target.dataset.id, 10);
+                const category = e.target.dataset.category;
+                const prop = e.target.dataset.type; // 'veggie' or 'glutenFree'
+                this.updateProductProperty(id, category, prop, e.target.checked);
             }
-
-            this.updateChangesUI();
         });
 
         // Search
@@ -318,7 +430,6 @@ class AdminApp {
         // Save directly to server
         this.btnSave.addEventListener('click', (e) => {
             if (e.shiftKey) {
-                // Shift+click = download as fallback
                 this.downloadAllChangedJSON();
             } else {
                 this.saveAllChanges();
@@ -333,15 +444,76 @@ class AdminApp {
         document.getElementById('btnBulkCancel').addEventListener('click', () => this.closeBulkModal());
         document.getElementById('btnBulkApply').addEventListener('click', () => this.applyBulkAdjust());
 
-        // Close modal on overlay click
-        document.getElementById('bulkModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) this.closeBulkModal();
+        // Force Sync from Local JSON
+        this.btnSyncLocal.addEventListener('click', () => this.forceSyncFromLocal());
+
+        // Edit Modal Actions
+        document.getElementById('btnEditCancel').addEventListener('click', () => this.closeEditProductModal());
+        document.getElementById('btnEditApply').addEventListener('click', () => this.applyProductEdit());
+
+        // Close modals on overlay click
+        [document.getElementById('bulkModal'), document.getElementById('editProductModal')].forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) {
+                        this.closeBulkModal();
+                        this.closeEditProductModal();
+                    }
+                });
+            }
         });
 
         // Keyboard: Escape closes modal
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.closeBulkModal();
+            if (e.key === 'Escape') {
+                this.closeBulkModal();
+                this.closeEditProductModal();
+            }
         });
+    }
+
+    updateProductProperty(productId, category, prop, value) {
+        const products = this.getCurrentData()[category];
+        if (!products) return;
+
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            product[prop] = value;
+            
+            // Si el cambio es el precio, solo actualizamos la clase visual de la fila
+            // para NO perder el foco (render() borraría el input activo).
+            if (prop === 'precio') {
+                const row = document.querySelector(`.product-row[data-id="${productId}"][data-category="${category}"]`);
+                if (row) {
+                    const original = this.getOriginalProduct(productId, category);
+                    const hasPriceChange = original && original.precio !== product.precio;
+                    
+                    row.classList.toggle('changed', this.isProductChanged(product, original));
+                    const input = row.querySelector('.price-input');
+                    if (input) input.classList.toggle('modified', hasPriceChange);
+                    
+                    const origSpan = row.querySelector('.price-original');
+                    if (origSpan) {
+                        origSpan.style.display = hasPriceChange ? 'inline' : 'none';
+                        if (original) origSpan.textContent = `$${original.precio.toLocaleString('es-AR')}`;
+                    }
+                }
+            } else {
+                // Para cambios de texto o dietas, re-renderizamos para que se vea el cambio visual (chips, etc)
+                this.render(this.searchInput.value);
+            }
+            
+            this.updateChangesUI();
+        }
+    }
+
+    isProductChanged(p, orig) {
+        if (!orig) return true;
+        return orig.precio !== p.precio || 
+               orig.veggie !== p.veggie || 
+               orig.glutenFree !== p.glutenFree ||
+               orig.nombre !== p.nombre ||
+               orig.descripcion !== p.descripcion;
     }
 
     /* ──────────────────────────────────────────────
@@ -449,7 +621,7 @@ class AdminApp {
     }
 
     /**
-     * Returns list of branch keys that have unsaved price changes.
+     * Returns list of branch keys that have unsaved changes.
      */
     _getChangedBranches() {
         const changed = [];
@@ -463,7 +635,7 @@ class AdminApp {
                 const origProds = original[cat] || [];
                 for (const p of curProds) {
                     const orig = origProds.find(op => op.id === p.id);
-                    if (orig && orig.precio !== p.precio) {
+                    if (this.isProductChanged(p, orig)) {
                         hasChanges = true;
                         break;
                     }
@@ -543,6 +715,56 @@ class AdminApp {
         this.render(this.searchInput.value);
         const sign = percent > 0 ? '+' : '';
         this.showToast(`💰 ${sign}${percent}% aplicado a ${count} producto${count !== 1 ? 's' : ''}`);
+    }
+
+    /* ──────────────────────────────────────────────
+       EDIT PRODUCT MODAL
+    ────────────────────────────────────────────── */
+
+    openEditProductModal(productId, category) {
+        const products = this.getCurrentData()[category];
+        if (!products) return;
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        document.getElementById('editProdId').value = productId;
+        document.getElementById('editProdCat').value = category;
+        document.getElementById('editProdName').value = product.nombre || '';
+        document.getElementById('editProdDesc').value = product.descripcion || '';
+
+        const modal = document.getElementById('editProductModal');
+        modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    closeEditProductModal() {
+        const modal = document.getElementById('editProductModal');
+        modal.classList.remove('show');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    applyProductEdit() {
+        const id = parseInt(document.getElementById('editProdId').value, 10);
+        const cat = document.getElementById('editProdCat').value;
+        const newName = document.getElementById('editProdName').value.trim();
+        const newDesc = document.getElementById('editProdDesc').value.trim();
+
+        if (!newName) {
+            this.showToast('⚠️ El nombre es obligatorio');
+            return;
+        }
+
+        const products = this.getCurrentData()[cat];
+        const product = products.find(p => p.id === id);
+        if (product) {
+            product.nombre = newName;
+            product.descripcion = newDesc;
+            
+            this.render(this.searchInput.value);
+            this.updateChangesUI();
+            this.closeEditProductModal();
+            this.showToast('✅ Producto actualizado');
+        }
     }
 
     /* ──────────────────────────────────────────────
