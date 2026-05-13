@@ -1,3 +1,9 @@
+// Firebase Initialization
+if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(firebaseConfig);
+}
+const database = typeof firebase !== 'undefined' ? firebase.database() : null;
+
 // Resolve branch from URL param, fallback to leloir
 const SUCURSALES = {
     leloir:   { label: 'Parque Leloir', file: 'data/productos-leloir.json' },
@@ -58,8 +64,17 @@ class MenuApp {
 
     async loadData() {
         try {
-            const response = await fetch(CONFIG.DATA_URL);
-            this.products = await response.json();
+            if (database) {
+                // Leer desde Firebase
+                const snapshot = await database.ref(`sucursales/${_urlParam}`).once('value');
+                this.products = snapshot.val() || {};
+                console.log('Datos cargados desde Firebase');
+            } else {
+                // Fallback a archivos locales
+                const response = await fetch(CONFIG.DATA_URL);
+                this.products = await response.json();
+                console.log('Datos cargados desde archivo local');
+            }
         } catch (error) {
             console.error('Error loading data:', error);
         }

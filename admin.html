@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de administración de precios — Gardenias Deli & Market.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Gardenias | Administración de Precios</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-wrapper">
+
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-top">
+                <a href="index.html" class="admin-back" aria-label="Volver al inicio">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Inicio
+                </a>
+            </div>
+            <div class="admin-brand">
+                <h1 class="admin-title">Gestión de Precios</h1>
+                <p class="admin-subtitle">GARDENIAS DELI & MARKET</p>
+            </div>
+        </header>
+
+        <!-- Branch Tabs -->
+        <nav class="branch-tabs" id="branchTabs">
+            <button class="branch-tab active" data-branch="leloir">
+                <span class="tab-dot"></span>
+                Parque Leloir
+            </button>
+            <button class="branch-tab" data-branch="castelar">
+                <span class="tab-dot"></span>
+                Castelar
+            </button>
+            <button class="branch-tab" data-branch="pinamar">
+                <span class="tab-dot"></span>
+                Pinamar
+            </button>
+        </nav>
+
+        <!-- Toolbar -->
+        <div class="admin-toolbar">
+            <div class="toolbar-left">
+                <div class="search-wrap" id="adminSearchWrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="adminSearch" placeholder="Buscar producto...">
+                </div>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn-tool" id="btnBulkAdjust" title="Ajuste masivo de precios">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Ajuste %
+                </button>
+                <button class="btn-tool btn-changes-count hidden" id="btnChangesCount">
+                    <span id="changesCountBadge">0</span> cambios
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="admin-content" id="adminContent">
+            <!-- Categories rendered by JS -->
+            <div class="loading-state" id="loadingState">
+                <div class="spinner"></div>
+                <p>Cargando productos…</p>
+            </div>
+        </main>
+
+        <!-- Sticky Footer Actions -->
+        <div class="admin-actions" id="adminActions">
+            <div class="actions-info">
+                <span class="changes-label" id="changesLabel">Sin cambios</span>
+            </div>
+            <div class="actions-buttons">
+                <button class="btn-secondary" id="btnRevert" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    Deshacer Todo
+                </button>
+                <button class="btn-primary" id="btnSave" disabled title="Shift+click para descargar JSON">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bulk Adjust Modal -->
+    <div class="modal-overlay hidden" id="bulkModal">
+        <div class="modal-card">
+            <h2 class="modal-title">Ajuste Masivo de Precios</h2>
+            <p class="modal-desc">Aplicar un porcentaje de aumento o descuento a todos los productos de la sucursal
+                activa.</p>
+
+            <div class="modal-field">
+                <label for="bulkPercent">Porcentaje (%)</label>
+                <div class="percent-input-wrap">
+                    <input type="number" id="bulkPercent" placeholder="Ej: 10" step="0.5" value="">
+                    <span class="percent-sign">%</span>
+                </div>
+                <p class="field-hint">Usa valores positivos para aumentar y negativos para descontar.</p>
+            </div>
+
+            <div class="modal-field">
+                <label for="bulkCategory">Categoría</label>
+                <select id="bulkCategory">
+                    <option value="__all__">Todas las categorías</option>
+                    <!-- Populated by JS -->
+                </select>
+            </div>
+
+            <div class="modal-field">
+                <label>Redondeo</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="rounding" value="100" checked>
+                        Centena ($100)
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="rounding" value="50">
+                        $50
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="rounding" value="0">
+                        Sin redondeo
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" id="btnBulkCancel">Cancelar</button>
+                <button class="btn-primary" id="btnBulkApply">Aplicar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast">
+        <span id="toastMsg"></span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>
