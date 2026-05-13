@@ -87,9 +87,43 @@
                     </svg>
                     Ajuste %
                 </button>
+                <button class="btn-tool" id="btnConfigPopup" title="Configurar aviso popup">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    Aviso Popup
+                </button>
                 <button class="btn-tool btn-changes-count hidden" id="btnChangesCount">
                     <span id="changesCountBadge">0</span> cambios
                 </button>
+            </div>
+        </div>
+
+        <!-- Popup Config Modal -->
+        <div id="popupConfigModal" class="modal-overlay hidden">
+            <div class="modal-content config-modal">
+                <div class="modal-header">
+                    <h2>Configuración del Popup</h2>
+                    <button class="btn-close-modal" id="btnConfigCancel">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="config-field">
+                        <label>Título del Aviso</label>
+                        <input type="text" id="configPopupTitle" placeholder="Ej: Horarios Especiales">
+                    </div>
+                    <div class="config-field">
+                        <label>Mensaje (HTML permitido)</label>
+                        <textarea id="configPopupBody" placeholder="Ej: Hoy cerramos a las 20hs." rows="4"></textarea>
+                    </div>
+                    <div class="config-field toggle-field">
+                        <label>Mostrar Popup al entrar</label>
+                        <label class="switch">
+                            <input type="checkbox" id="configPopupEnabled">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal-primary" id="btnConfigApply">Aplicar cambios</button>
+                </div>
             </div>
         </div>
 

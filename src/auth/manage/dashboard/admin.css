@@ -422,7 +422,141 @@
 .diet-toggle input:checked + .diet-switch {
     background: var(--color-accent);
 }
+/* ── Config Section ─────────────────────────────────────────── */
+.admin-config-section {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
 
+.config-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+}
+
+.config-modal {
+    max-width: 400px;
+    padding: 1.5rem;
+    border-radius: 20px;
+}
+
+.config-modal .modal-header {
+    margin-bottom: 1.2rem;
+    padding: 0;
+    border: none;
+}
+
+.config-modal h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.config-modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.config-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.config-field label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #aaa;
+}
+
+.config-field input, .config-field textarea {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #eee;
+    background: #fcfcfc;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.config-field input:focus, .config-field textarea:focus {
+    background: #fff;
+    border-color: var(--color-accent);
+}
+
+.toggle-field {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+/* Switch styling */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e4e4e7;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input:checked + .slider {
+  background-color: #34c759;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+}
 .diet-toggle.veggie input:checked + .diet-switch {
     background: #34c759;
 }
@@ -614,15 +748,15 @@
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
+    transition: all 0.15s ease-out;
 }
 
 .modal-overlay.show {

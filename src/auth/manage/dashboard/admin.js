@@ -58,6 +58,10 @@ class AdminApp {
         this.btnChanges    = document.getElementById('btnChangesCount');
         this.changesBadge  = document.getElementById('changesCountBadge');
 
+        this.configTitle   = document.getElementById('configPopupTitle');
+        this.configBody    = document.getElementById('configPopupBody');
+        this.configEnabled = document.getElementById('configPopupEnabled');
+
         this.checkAuth();
     }
 
@@ -100,9 +104,15 @@ class AdminApp {
                 let data = null;
 
                 if (database) {
-                    // Intentar leer de Firebase
-                    const snapshot = await database.ref(`sucursales/${key}`).once('value');
+                    // Intentar leer de Firebase (ruta nueva)
+                    let snapshot = await database.ref(`sucursales/${key}`).once('value');
                     data = snapshot.val();
+
+                    // Si no hay datos, intentar ruta vieja para migrar
+                    if (!data) {
+                        snapshot = await database.ref(`menu/${key}`).once('value');
+                        data = snapshot.val();
+                    }
                 }
 
                 // Si no hay datos en Firebase o no hay DB, cargar local como fallback/base
@@ -198,10 +208,14 @@ class AdminApp {
             return;
         }
 
+        // Update Branch Config UI
+        const config = categories.config || {};
+        const popup  = config.popup || { title: '', body: '', enabled: false };
+        this.configTitle.value = popup.title || '';
+        this.configBody.value  = popup.body || '';
+        this.configEnabled.checked = !!popup.enabled;
+
         const sortedCats = CATEGORY_ORDER.filter(c => categories.includes(c));
-        categories.forEach(c => {
-            if (!sortedCats.includes(c)) sortedCats.push(c);
-        });
 
         let html = '';
         let anyResults = false;
@@ -316,29 +330,40 @@ class AdminApp {
 
     countChanges() {
         let count = 0;
-        for (const branch of Object.keys(BRANCHES)) {
-            const current  = this.branchData[branch] || {};
-            const original = this.originalData[branch] || {};
-            for (const cat of Object.keys(current)) {
-                const curProds  = current[cat] || [];
-                const origProds = original[cat] || [];
-                curProds.forEach(p => {
-                    const orig = origProds.find(op => op.id === p.id);
-                    if (orig) {
-                        if (orig.precio !== p.precio || 
-                            orig.veggie !== p.veggie || 
-                            orig.glutenFree !== p.glutenFree ||
-                            orig.nombre !== p.nombre ||
-                            orig.descripcion !== p.descripcion) {
-                            count++;
-                        }
-                    } else {
-                        count++;
-                    }
-                });
-            }
+        const currentData  = this.getCurrentData();
+        const originalData = this.getOriginalData();
+
+        if (!currentData || !originalData) return 0;
+
+        // Check product changes
+        for (const cat of Object.keys(currentData)) {
+            if (cat === 'config') continue;
+            const curProds  = currentData[cat] || [];
+            const origProds = originalData[cat] || [];
+            curProds.forEach(p => {
+                const orig = origProds.find(op => op.id === p.id);
+                if (this.isProductChanged(p, orig)) count++;
+            });
         }
+
+        // Check Config changes
+        const curConfig  = this._getUIConfig();
+        const origConfig = originalData.config || { popup: { title: '', body: '', enabled: false } };
+        if (JSON.stringify(curConfig) !== JSON.stringify(origConfig)) {
+            count++;
+        }
+
         return count;
+    }
+
+    _getUIConfig() {
+        return {
+            popup: {
+                title: this.configTitle.value,
+                body: this.configBody.value,
+                enabled: this.configEnabled.checked
+            }
+        };
     }
 
     updateChangesUI() {
@@ -444,6 +469,12 @@ class AdminApp {
         document.getElementById('btnBulkCancel').addEventListener('click', () => this.closeBulkModal());
         document.getElementById('btnBulkApply').addEventListener('click', () => this.applyBulkAdjust());
 
+        // Setup events for Branch Config
+        [this.configTitle, this.configBody].forEach(el => {
+            el.addEventListener('input', () => this.updateChangesUI());
+        });
+        this.configEnabled.addEventListener('change', () => this.updateChangesUI());
+
         // Force Sync from Local JSON
         this.btnSyncLocal.addEventListener('click', () => this.forceSyncFromLocal());
 
@@ -451,8 +482,37 @@ class AdminApp {
         document.getElementById('btnEditCancel').addEventListener('click', () => this.closeEditProductModal());
         document.getElementById('btnEditApply').addEventListener('click', () => this.applyProductEdit());
 
+        // Popup Config Modal
+        const btnConfigPopup = document.getElementById('btnConfigPopup');
+        const modalConfig = document.getElementById('popupConfigModal');
+        const btnConfigCancel = document.getElementById('btnConfigCancel');
+        const btnConfigApply = document.getElementById('btnConfigApply');
+
+        btnConfigPopup.onclick = () => {
+            // Sincronizar campos con los datos actuales antes de abrir
+            const data = this.getCurrentData();
+            const popup = (data.config && data.config.popup) || { title: '', body: '', enabled: false };
+            this.configTitle.value = popup.title || '';
+            this.configBody.value = popup.body || '';
+            this.configEnabled.checked = !!popup.enabled;
+
+            modalConfig.classList.remove('hidden');
+            setTimeout(() => modalConfig.classList.add('show'), 10);
+        };
+
+        btnConfigCancel.onclick = () => {
+            modalConfig.classList.remove('show');
+            setTimeout(() => modalConfig.classList.add('hidden'), 250);
+        };
+
+        btnConfigApply.onclick = () => {
+            this.updateChangesUI();
+            btnConfigCancel.click();
+            this.showToast('✅ Configuración de popup lista para guardar');
+        };
+
         // Close modals on overlay click
-        [document.getElementById('bulkModal'), document.getElementById('editProductModal')].forEach(modal => {
+        [document.getElementById('bulkModal'), document.getElementById('editProductModal'), modalConfig].forEach(modal => {
             if (modal) {
                 modal.addEventListener('click', (e) => {
                     if (e.target === e.currentTarget) {
@@ -540,8 +600,13 @@ class AdminApp {
         for (const branch of changedBranches) {
             try {
                 if (database) {
+                    const data = this.branchData[branch];
+                    // Update config from UI if it's the active branch
+                    if (branch === this.activeBranch) {
+                        data.config = this._getUIConfig();
+                    }
                     // Guardar en Firebase
-                    await database.ref(`sucursales/${branch}`).set(this.branchData[branch]);
+                    await database.ref(`sucursales/${branch}`).set(data);
                     savedCount++;
                 } else {
                     // Fallback al servidor Python local si no hay Firebase
@@ -620,9 +685,6 @@ class AdminApp {
         }
     }
 
-    /**
-     * Returns list of branch keys that have unsaved changes.
-     */
     _getChangedBranches() {
         const changed = [];
         for (const branch of Object.keys(BRANCHES)) {
@@ -631,6 +693,7 @@ class AdminApp {
             let hasChanges = false;
 
             for (const cat of Object.keys(current)) {
+                if (cat === 'config') continue;
                 const curProds  = current[cat] || [];
                 const origProds = original[cat] || [];
                 for (const p of curProds) {
@@ -643,7 +706,23 @@ class AdminApp {
                 if (hasChanges) break;
             }
 
-            if (hasChanges) changed.push(branch);
+            if (hasChanges) {
+                changed.push(branch);
+                continue;
+            }
+
+            // Check Config change for this branch
+            const curData  = this.branchData[branch];
+            const origData = this.originalData[branch];
+            const curConfig = (branch === this.activeBranch) 
+                ? this._getUIConfig() 
+                : (curData.config || { popup: { title: '', body: '', enabled: false } });
+            
+            const origConfig = origData.config || { popup: { title: '', body: '', enabled: false } };
+            
+            if (JSON.stringify(curConfig) !== JSON.stringify(origConfig)) {
+                changed.push(branch);
+            }
         }
         return changed;
     }

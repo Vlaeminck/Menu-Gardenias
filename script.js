@@ -82,31 +82,85 @@ class MenuApp {
         this.renderProducts('todos');
         this.setupEventListeners();
         this.setupIntersectionObserver();
+        this.setupPopups();
+    }
+
+    setupPopups() {
+        const popupOverlay = document.getElementById('iosOverlay');
+        const closeBtn = document.getElementById('closePopup');
+        const popupTitle = document.getElementById('dynamic-popup-title');
+        const popupBody  = document.getElementById('dynamic-popup-body');
+
+        // Buscar configuración en los datos (clave 'config')
+        const config = this.currentData.config || {};
+        const popupConfig = config.popup || { enabled: false, title: '', body: '' };
+
+        if (popupOverlay && popupConfig.enabled) {
+            if (popupTitle) popupTitle.textContent = popupConfig.title || 'Aviso';
+            if (popupBody)  popupBody.innerHTML = popupConfig.body || '';
+            
+            // Mostrar después de un delay
+            setTimeout(() => {
+                popupOverlay.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    popupOverlay.classList.add('show');
+                });
+            }, 1500);
+        }
+
+        if (closeBtn && popupOverlay) {
+            closeBtn.onclick = () => {
+                popupOverlay.classList.remove('show');
+                setTimeout(() => {
+                    popupOverlay.classList.add('hidden');
+                }, 300);
+            };
+        }
     }
 
     async loadData() {
         try {
             if (database) {
-                // Leer desde Firebase
-                const snapshot = await database.ref(`sucursales/${_urlParam}`).once('value');
-                this.products = snapshot.val() || {};
-                console.log('Datos cargados desde Firebase');
+                // 1. Intentar con la ruta nueva 'sucursales'
+                let snapshot = await database.ref(`sucursales/${_urlParam}`).once('value');
+                let data = snapshot.val();
+
+                // 2. Si está vacío, intentar con la ruta vieja 'menu'
+                if (!data) {
+                    snapshot = await database.ref(`menu/${_urlParam}`).once('value');
+                    data = snapshot.val();
+                }
+
+                // 3. Si sigue vacío, cargar de los archivos locales
+                if (!data) {
+                    const response = await fetch(CONFIG.DATA_URL);
+                    data = await response.json();
+                    console.log('Cargado de backup local (Firebase vacío)');
+                } else {
+                    console.log('Cargado desde Firebase');
+                }
+                
+                this.currentData = data || {};
             } else {
-                // Fallback a archivos locales
+                // Fallback directo si no hay conexión a Firebase
                 const response = await fetch(CONFIG.DATA_URL);
-                this.products = await response.json();
-                console.log('Datos cargados desde archivo local');
+                this.currentData = await response.json();
             }
         } catch (error) {
             console.error('Error loading data:', error);
+            // Último recurso: intentar cargar local sí o sí
+            try {
+                const response = await fetch(CONFIG.DATA_URL);
+                this.currentData = await response.json();
+            } catch(e) {}
         }
     }
 
     renderCategories() {
         const container = document.getElementById(CONFIG.SELECTORS.CATEGORY_LIST);
         
-        // Ordenar categorías según CATEGORY_ORDER
-        const existingCategories = Object.keys(this.products);
+        // Ordenar categorías según CATEGORY_ORDER (ignorando 'config')
+        const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config');
         const sortedCategories = CATEGORY_ORDER.filter(cat => existingCategories.includes(cat));
         
         // Agregar cualquier categoría extra que no esté en el orden definido
@@ -163,7 +217,7 @@ class MenuApp {
         const container = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
         let content = '';
 
-        const existingCategories = Object.keys(this.products);
+        const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config');
         let categoriesToRender = [];
 
         if (filterCategory === 'todos') {
@@ -178,7 +232,7 @@ class MenuApp {
         }
 
         categoriesToRender.forEach(cat => {
-            const catProducts = this.products[cat];
+            const catProducts = this.currentData[cat];
             if (!catProducts || catProducts.length === 0) return;
 
             // Filter by search term

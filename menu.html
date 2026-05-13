@@ -70,30 +70,9 @@
     <!-- POPUPS ------------------------------------------------ -->
     <div id="iosOverlay" class="ios-overlay hidden">
         <div class="ios-alert">
-            <!-- Popups individuales por sucursal -->
-            <div id="popup-leloir" class="ios-alert-content branch-popup hidden">
-                <h3>Horarios Especiales</h3>
-                <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de soda.
-                </p>
-            </div>
-
-            <div id="popup-castelar" class="ios-alert-content branch-popup hidden">
-                <h3>Horarios Especiales</h3>
-                <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de soda.
-                </p>
-            </div>
-
-            <div id="popup-pinamar" class="ios-alert-content branch-popup hidden">
-                <h3>Horarios Especiales</h3>
-                <p>Disfruta nuestros desayunos de 9 a 12hs & Meriendas de 16 a 20hs. <br> Con infusión + vasito de
-                    soda.
-                </p>
-            </div>
-
-            <!-- Popup extra (aviso general) -->
-            <div id="popup-extra" class="ios-alert-content hidden" style="border-top: 0.5px solid rgba(60, 60, 67, 0.29); margin-top: -10px;">
-                <p style="font-weight: 600; color: #ff3b30;">Aviso Importante</p>
-                <p>Nuestra cocina no tiene certificado sin TACC.</p>
+            <div id="popup-content" class="ios-alert-content">
+                <h3 id="dynamic-popup-title">Aviso</h3>
+                <p id="dynamic-popup-body">Cargando información...</p>
             </div>
 
             <button id="closePopup" class="ios-alert-btn">OK</button>
