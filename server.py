@@ -201,7 +201,7 @@ class GardeniasHandler(SimpleHTTPRequestHandler):
 def run():
     server = HTTPServer(('', PORT), GardeniasHandler)
     print(f'\nGardenias Server')
-    print(f'   http://localhost:{PORT}/admin.html  <- Panel de precios')
+    print(f'   http://localhost:{PORT}/src/auth/login.html  <- Panel de precios')
     print(f'   http://localhost:{PORT}/index.html   <- Menu publico')
     print(f'\n   Ctrl+C para detener\n')
     try:

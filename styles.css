@@ -2,7 +2,7 @@
     /* Colors */
     --color-bg: #ffffff;
     --color-text: #1a1a1a;
-    --color-text-light: #666666;
+    --color-text-light: #4a4a4a;
     --color-accent: #000000;
     --color-border: #e0e0e0;
     --color-bg-alt: #f8f9fa;
@@ -25,6 +25,7 @@
     src: url('src/fonts/Logo - BlissfulThinking.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 font-style: normal;
@@ -35,6 +36,7 @@ font-style: normal;
     src: url('src/fonts/centurygothic.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -42,6 +44,7 @@ font-style: normal;
     src: url('src/fonts/centurygothic_bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
 * {

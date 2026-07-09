@@ -1,8 +1,4 @@
-// Firebase Initialization
-if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = typeof firebase !== 'undefined' ? firebase.database() : null;
+// No Firebase SDK init required - we use the REST API for better performance
 
 // Resolve branch from URL param, fallback to leloir
 const SUCURSALES = {
@@ -120,29 +116,30 @@ class MenuApp {
 
     async loadData() {
         try {
-            if (database) {
+            if (typeof firebaseConfig !== 'undefined' && firebaseConfig.databaseURL) {
+                const DB_URL = firebaseConfig.databaseURL;
                 // 1. Intentar con la ruta nueva 'sucursales'
-                let snapshot = await database.ref(`sucursales/${_urlParam}`).once('value');
-                let data = snapshot.val();
+                let response = await fetch(`${DB_URL}/sucursales/${_urlParam}.json`);
+                let data = await response.json();
 
                 // 2. Si está vacío, intentar con la ruta vieja 'menu'
                 if (!data) {
-                    snapshot = await database.ref(`menu/${_urlParam}`).once('value');
-                    data = snapshot.val();
+                    response = await fetch(`${DB_URL}/menu/${_urlParam}.json`);
+                    data = await response.json();
                 }
 
                 // 3. Si sigue vacío, cargar de los archivos locales
                 if (!data) {
-                    const response = await fetch(CONFIG.DATA_URL);
+                    response = await fetch(CONFIG.DATA_URL);
                     data = await response.json();
                     console.log('Cargado de backup local (Firebase vacío)');
                 } else {
-                    console.log('Cargado desde Firebase');
+                    console.log('Cargado desde Firebase REST API');
                 }
                 
                 this.currentData = data || {};
             } else {
-                // Fallback directo si no hay conexión a Firebase
+                // Fallback directo si no hay config de Firebase
                 const response = await fetch(CONFIG.DATA_URL);
                 this.currentData = await response.json();
             }
@@ -215,7 +212,7 @@ class MenuApp {
 
     renderProducts(filterCategory = 'todos', searchTerm = '') {
         const container = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
-        let content = '';
+        container.innerHTML = ''; // Clear container for new render
 
         const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config');
         let categoriesToRender = [];
@@ -231,40 +228,56 @@ class MenuApp {
             categoriesToRender = [filterCategory];
         }
 
-        categoriesToRender.forEach(cat => {
-            const catProducts = this.currentData[cat];
-            if (!catProducts || catProducts.length === 0) return;
+        let hasProducts = false;
 
-            // Filter by search term
-            const filteredProducts = catProducts.filter(p => {
-                if (!searchTerm) return true;
-                const term = searchTerm.toLowerCase();
-                return p.nombre.toLowerCase().includes(term) ||
-                    (p.descripcion && p.descripcion.toLowerCase().includes(term));
-            });
-
-            if (filteredProducts.length > 0) {
-                const info = this.categoriesInfo[cat] || { titulo: cat, descripcion: '' };
-
-                content += `
-                    <section id="${cat}" class="category-section">
-                        <div class="category-header">
-                            <h2 class="category-title">${info.titulo}</h2>
-                            ${info.descripcion ? `<p class="category-description">${info.descripcion}</p>` : ''}
-                        </div>
-                        <div class="products-grid">
-                            ${filteredProducts.map(p => this.createProductCard(p)).join('')}
-                        </div>
-                    </section>
-                `;
+        // Función recursiva para renderizar por lotes y no bloquear el hilo principal
+        const renderCategoryChunk = (index) => {
+            if (index >= categoriesToRender.length) {
+                if (!hasProducts) {
+                    container.innerHTML = '<div class="no-results"><p>No se encontraron productos.</p></div>';
+                }
+                return;
             }
-        });
 
-        if (content === '') {
-            content = '<div class="no-results"><p>No se encontraron productos.</p></div>';
-        }
+            const cat = categoriesToRender[index];
+            const catProducts = this.currentData[cat];
 
-        container.innerHTML = content;
+            if (catProducts && catProducts.length > 0) {
+                // Filter by search term
+                const filteredProducts = catProducts.filter(p => {
+                    if (!searchTerm) return true;
+                    const term = searchTerm.toLowerCase();
+                    return p.nombre.toLowerCase().includes(term) ||
+                        (p.descripcion && p.descripcion.toLowerCase().includes(term));
+                });
+
+                if (filteredProducts.length > 0) {
+                    hasProducts = true;
+                    const info = this.categoriesInfo[cat] || { titulo: cat, descripcion: '' };
+
+                    const sectionHTML = `
+                        <section id="${cat}" class="category-section">
+                            <div class="category-header">
+                                <h2 class="category-title">${info.titulo}</h2>
+                                ${info.descripcion ? `<p class="category-description">${info.descripcion}</p>` : ''}
+                            </div>
+                            <div class="products-grid">
+                                ${filteredProducts.map(p => this.createProductCard(p)).join('')}
+                            </div>
+                        </section>
+                    `;
+                    
+                    container.insertAdjacentHTML('beforeend', sectionHTML);
+                }
+            }
+
+            // Usar requestAnimationFrame + setTimeout para ceder el control al navegador y dibujar la pantalla
+            requestAnimationFrame(() => {
+                setTimeout(() => renderCategoryChunk(index + 1), 0);
+            });
+        };
+
+        renderCategoryChunk(0);
     }
 
     setupEventListeners() {

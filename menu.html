@@ -3,12 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Menú digital de Gardenias - Experiencia gastronómica en Parque Leloir.">
     <meta name="theme-color" content="#ffffff">
     <title>Gardenias | Menú</title>
 
     <!-- Fuentes: Fuentes locales usadas (BlissfulThinking, CenturyGothic) -->
+
+    <link rel="preload" href="src/fonts/Logo - BlissfulThinking.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="src/fonts/centurygothic.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="src/fonts/centurygothic_bold.ttf" as="font" type="font/ttf" crossorigin>
 
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript">
@@ -34,7 +38,7 @@
             <p class="brand-location"><!-- set by JS --></p>
         </div>
         <div class="header-decoration">
-            <img src="src/img/logo-floral.png" alt="Gardenias Floral Logo" class="floral-icon">
+            <img src="src/img/logo-floral.png" alt="Gardenias Floral Logo" class="floral-icon" width="120" height="120" fetchpriority="high">
         </div>
     </header>
 
@@ -79,12 +83,10 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <!-- Firebase SDK (Config only for REST API) -->
+    <script defer src="firebase-config.js"></script>
 
-    <script src="script.js"></script>
+    <script defer src="script.js"></script>
 </body>
 
 </html>

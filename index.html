@@ -3,10 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Gardenias Deli & Market — Seleccioná tu sucursal para acceder al menú digital.">
     <meta name="theme-color" content="#ffffff">
     <title>Gardenias | Elegí tu sucursal</title>
+
+    <link rel="preload" href="src/fonts/Logo - BlissfulThinking.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="src/fonts/centurygothic.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="src/fonts/centurygothic_bold.ttf" as="font" type="font/ttf" crossorigin>
 
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="landing.css">
@@ -26,7 +30,7 @@
         <!-- Header / Branding -->
         <header class="landing-header">
             <div class="landing-logo-wrap">
-                <img src="src/img/logo-floral-nobackground.png" alt="Gardenias logo" class="landing-logo">
+                <img src="src/img/logo-floral-nobackground.png" alt="Gardenias logo" class="landing-logo" width="70" height="70" fetchpriority="high">
             </div>
             <h1 class="landing-brand">GARDENIAS</h1>
             <p class="landing-subtitle">DELI &amp; MARKET</p>
