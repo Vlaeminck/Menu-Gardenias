@@ -387,17 +387,27 @@ h4 {
     margin-bottom: var(--space-md);
 }
 
+.social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: var(--space-md);
+}
+
 .social-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     color: var(--color-text);
     text-decoration: none;
     font-size: 0.9rem;
-    letter-spacing: 0.1em;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
 }
 
 .social-links a:hover {
-    border-color: var(--color-text);
+    opacity: 0.7;
 }
 
 /* Helper Classes */
