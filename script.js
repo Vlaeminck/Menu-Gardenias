@@ -138,6 +138,15 @@ class MenuApp {
                 }
                 
                 this.currentData = data || {};
+
+                // Firebase elimina arrays vacíos. Reconstruimos las categorías vacías usando el orden guardado.
+                if (this.currentData.config && this.currentData.config.categoryOrder) {
+                    this.currentData.config.categoryOrder.forEach(cat => {
+                        if (!this.currentData[cat] && cat !== 'config') {
+                            this.currentData[cat] = [];
+                        }
+                    });
+                }
             } else {
                 // Fallback directo si no hay config de Firebase
                 const response = await fetch(CONFIG.DATA_URL);
@@ -156,9 +165,17 @@ class MenuApp {
     renderCategories() {
         const container = document.getElementById(CONFIG.SELECTORS.CATEGORY_LIST);
         
-        // Ordenar categorías según CATEGORY_ORDER (ignorando 'config')
-        const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config');
-        const sortedCategories = CATEGORY_ORDER.filter(cat => existingCategories.includes(cat));
+        const config = this.currentData.config || {};
+        const disabledCats = config.disabledCategories || [];
+        const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config' && !disabledCats.includes(cat));
+        
+        const savedOrder = config.categoryOrder || [];
+        let sortedCategories = [];
+        if (savedOrder.length > 0) {
+            sortedCategories = savedOrder.filter(cat => existingCategories.includes(cat));
+        } else {
+            sortedCategories = CATEGORY_ORDER.filter(cat => existingCategories.includes(cat));
+        }
         
         // Agregar cualquier categoría extra que no esté en el orden definido
         existingCategories.forEach(cat => {
@@ -214,12 +231,18 @@ class MenuApp {
         const container = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
         container.innerHTML = ''; // Clear container for new render
 
-        const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config');
+        const config = this.currentData.config || {};
+        const disabledCats = config.disabledCategories || [];
+        const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config' && !disabledCats.includes(cat));
         let categoriesToRender = [];
 
         if (filterCategory === 'todos') {
-            // Seguir el orden definido en CATEGORY_ORDER
-            categoriesToRender = CATEGORY_ORDER.filter(cat => existingCategories.includes(cat));
+            const savedOrder = config.categoryOrder || [];
+            if (savedOrder.length > 0) {
+                categoriesToRender = savedOrder.filter(cat => existingCategories.includes(cat));
+            } else {
+                categoriesToRender = CATEGORY_ORDER.filter(cat => existingCategories.includes(cat));
+            }
             // Agregar extras
             existingCategories.forEach(cat => {
                 if (!categoriesToRender.includes(cat)) categoriesToRender.push(cat);

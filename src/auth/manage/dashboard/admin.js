@@ -62,6 +62,8 @@ class AdminApp {
         this.configBody    = document.getElementById('configPopupBody');
         this.configEnabled = document.getElementById('configPopupEnabled');
 
+
+
         this.checkAuth();
     }
 
@@ -127,6 +129,15 @@ class AdminApp {
                     }
                 } else {
                     console.log(`Cargado desde Firebase para ${key}`);
+                }
+
+                // Firebase elimina arrays vacíos. Reconstruimos las categorías vacías.
+                if (data && data.config && data.config.categoryOrder) {
+                    data.config.categoryOrder.forEach(cat => {
+                        if (!data[cat] && cat !== 'config') {
+                            data[cat] = [];
+                        }
+                    });
                 }
 
                 this.branchData[key] = data;
@@ -209,13 +220,25 @@ class AdminApp {
         }
 
         // Update Branch Config UI
-        const config = categories.config || {};
+        const config = data.config || {};
         const popup  = config.popup || { title: '', body: '', enabled: false };
         this.configTitle.value = popup.title || '';
         this.configBody.value  = popup.body || '';
         this.configEnabled.checked = !!popup.enabled;
 
-        const sortedCats = CATEGORY_ORDER.filter(c => categories.includes(c));
+        const savedOrder = config.categoryOrder || [];
+        let sortedCats = [];
+        if (savedOrder.length > 0) {
+            sortedCats = savedOrder.filter(c => categories.includes(c));
+            categories.forEach(c => {
+                if (c !== 'config' && !sortedCats.includes(c)) sortedCats.push(c);
+            });
+        } else {
+            sortedCats = CATEGORY_ORDER.filter(c => categories.includes(c));
+            categories.forEach(c => {
+                if (c !== 'config' && !sortedCats.includes(c)) sortedCats.push(c);
+            });
+        }
 
         let html = '';
         let anyResults = false;
@@ -231,26 +254,65 @@ class AdminApp {
                   )
                 : products;
 
-            if (filtered.length === 0) continue;
+            if (term && filtered.length === 0) continue;
             anyResults = true;
 
             const isOpen = this.openCategories.has(cat) || !!term;
+            const disabledCategories = config.disabledCategories || [];
+            const isDisabled = disabledCategories.includes(cat);
 
             html += `
-                <div class="admin-category ${isOpen ? 'open' : ''}" data-category="${cat}">
-                    <button class="category-toggle" data-cat="${cat}">
-                        <span class="toggle-left">
-                            <span>${cat}</span>
-                            <span class="cat-count">${filtered.length} item${filtered.length !== 1 ? 's' : ''}</span>
-                        </span>
-                        <svg class="toggle-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
+                <div class="admin-category ${isOpen ? 'open' : ''} ${isDisabled ? 'category-disabled' : ''}" data-category="${cat}" draggable="true">
+                    <div class="category-header-wrap">
+                        <div class="drag-handle" title="Arrastrar para reordenar">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="12" r="1"></circle>
+                                <circle cx="9" cy="5" r="1"></circle>
+                                <circle cx="9" cy="19" r="1"></circle>
+                                <circle cx="15" cy="12" r="1"></circle>
+                                <circle cx="15" cy="5" r="1"></circle>
+                                <circle cx="15" cy="19" r="1"></circle>
+                            </svg>
+                        </div>
+                        <button class="category-toggle" data-cat="${cat}">
+                            <span class="toggle-left" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span>${cat}</span>
+                                <span class="cat-count">${filtered.length} item${filtered.length !== 1 ? 's' : ''}</span>
+                            </span>
+                            <svg class="toggle-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="category-visibility-toggle">
+                            <button class="btn-options btn-rename-cat" data-cat="${cat}" title="Renombrar categoría" style="margin-right: 0.5rem;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg>
+                            </button>
+                            <button class="btn-options btn-delete-cat" data-cat="${cat}" title="Eliminar sección" style="margin-right: 0.5rem; color: #e74c3c;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                            <button class="btn-options btn-transfer-cat" data-cat="${cat}" title="Copiar categoría a otra sucursal">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <label class="switch" style="margin-left: 0.5rem;" title="${isDisabled ? 'Categoría oculta' : 'Categoría visible'}">
+                                <input type="checkbox" class="cat-visibility-input" data-cat="${cat}" ${!isDisabled ? 'checked' : ''}>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="category-products">
                         <div class="product-list">
                             ${filtered.map(p => this.renderProductRow(p, cat)).join('')}
+                            ${filtered.length === 0 ? '<p style="padding: 1rem; color: #999; text-align: center; font-size: 0.85rem; margin: 0;">Esta sección está vacía.</p>' : ''}
                         </div>
                     </div>
                 </div>`;
@@ -348,7 +410,9 @@ class AdminApp {
 
         // Check Config changes
         const curConfig  = this._getUIConfig();
-        const origConfig = originalData.config || { popup: { title: '', body: '', enabled: false } };
+        const origConfig = originalData.config || { popup: { title: '', body: '', enabled: false }, disabledCategories: [], categoryOrder: [] };
+        if (!origConfig.disabledCategories) origConfig.disabledCategories = [];
+        if (!origConfig.categoryOrder) origConfig.categoryOrder = [];
         if (JSON.stringify(curConfig) !== JSON.stringify(origConfig)) {
             count++;
         }
@@ -357,12 +421,15 @@ class AdminApp {
     }
 
     _getUIConfig() {
+        const data = this.getCurrentData();
         return {
             popup: {
                 title: this.configTitle.value,
                 body: this.configBody.value,
                 enabled: this.configEnabled.checked
-            }
+            },
+            disabledCategories: data.config?.disabledCategories || [],
+            categoryOrder: data.config?.categoryOrder || []
         };
     }
 
@@ -407,6 +474,27 @@ class AdminApp {
 
         // Delegate content events
         this.contentEl.addEventListener('click', (e) => {
+            // Rename Category
+            const renameBtn = e.target.closest('.btn-rename-cat');
+            if (renameBtn) {
+                this.renameCategory(renameBtn.dataset.cat);
+                return;
+            }
+
+            // Delete Category
+            const deleteCatBtn = e.target.closest('.btn-delete-cat');
+            if (deleteCatBtn) {
+                this.deleteCategory(deleteCatBtn.dataset.cat);
+                return;
+            }
+
+            // Transfer Category
+            const transferBtn = e.target.closest('.btn-transfer-cat');
+            if (transferBtn) {
+                this.openTransferCategoryModal(transferBtn.dataset.cat);
+                return;
+            }
+
             // Category Toggle
             const toggle = e.target.closest('.category-toggle');
             if (toggle) {
@@ -445,6 +533,10 @@ class AdminApp {
                 const prop = e.target.dataset.type; // 'veggie' or 'glutenFree'
                 this.updateProductProperty(id, category, prop, e.target.checked);
             }
+            if (e.target.classList.contains('cat-visibility-input')) {
+                const cat = e.target.dataset.cat;
+                this.toggleCategoryVisibility(cat, e.target.checked);
+            }
         });
 
         // Search
@@ -478,11 +570,72 @@ class AdminApp {
         // Force Sync from Local JSON
         this.btnSyncLocal.addEventListener('click', () => this.forceSyncFromLocal());
 
+        // Export JSON
+        const btnExportJSON = document.getElementById('btnExportJSON');
+        if (btnExportJSON) {
+            btnExportJSON.addEventListener('click', () => {
+                const json = JSON.stringify(this.branchData[this.activeBranch], null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement('a');
+                a.href     = url;
+                a.download = `productos-${this.activeBranch}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                this.showToast(`📥 Archivo JSON descargado`);
+            });
+        }
+
+        // New Category
+        const btnNewCat = document.getElementById('btnNewCategory');
+        if (btnNewCat) {
+            btnNewCat.addEventListener('click', () => this.createNewCategory());
+        }
+
+        // Drag and Drop for Categories
+        this.contentEl.addEventListener('dragstart', (e) => {
+            const catEl = e.target.closest('.admin-category');
+            if (catEl) {
+                catEl.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            }
+        });
+
+        this.contentEl.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const dragging = this.contentEl.querySelector('.dragging');
+            if (!dragging) return;
+            const catEl = e.target.closest('.admin-category');
+            if (catEl && catEl !== dragging) {
+                const rect = catEl.getBoundingClientRect();
+                const mid = rect.top + rect.height / 2;
+                if (e.clientY < mid) {
+                    catEl.parentNode.insertBefore(dragging, catEl);
+                } else {
+                    catEl.parentNode.insertBefore(dragging, catEl.nextSibling);
+                }
+            }
+        });
+
+        this.contentEl.addEventListener('dragend', (e) => {
+            const catEl = e.target.closest('.admin-category');
+            if (catEl) {
+                catEl.classList.remove('dragging');
+                this.saveNewCategoryOrder();
+            }
+        });
+
         // Edit Modal Actions
         document.getElementById('btnEditCancel').addEventListener('click', () => this.closeEditProductModal());
         document.getElementById('btnEditApply').addEventListener('click', () => this.applyProductEdit());
 
-        // Popup Config Modal
+        // Transfer Modal Actions
+        document.getElementById('btnTransferCancel').addEventListener('click', () => this.closeTransferCategoryModal());
+        document.getElementById('btnTransferApply').addEventListener('click', () => this.applyTransferCategory());
+
+        // Close Modals on click outsideal
         const btnConfigPopup = document.getElementById('btnConfigPopup');
         const modalConfig = document.getElementById('popupConfigModal');
         const btnConfigCancel = document.getElementById('btnConfigCancel');
@@ -528,8 +681,213 @@ class AdminApp {
             if (e.key === 'Escape') {
                 this.closeBulkModal();
                 this.closeEditProductModal();
+                this.closeTransferCategoryModal();
             }
         });
+    }
+
+    createNewCategory() {
+        let catName = prompt('Introduce el nombre de la nueva categoría (preferiblemente en mayúsculas):');
+        if (!catName || !catName.trim()) return;
+        
+        catName = catName.trim().toUpperCase();
+        const data = this.getCurrentData();
+        
+        if (data[catName]) {
+            alert('Esta categoría ya existe en esta sucursal.');
+            return;
+        }
+
+        // Create category with a dummy product so it doesn't get dropped by Firebase
+        data[catName] = [{
+            id: Date.now(),
+            nombre: "NUEVO PRODUCTO",
+            descripcion: "Editar nombre y precio",
+            precio: 0,
+            veggie: false,
+            glutenFree: false
+        }];
+        
+        // Add to categoryOrder
+        if (!data.config) data.config = {};
+        if (!data.config.categoryOrder) {
+            const existingCategories = Object.keys(data).filter(c => c !== 'config');
+            data.config.categoryOrder = CATEGORY_ORDER.filter(c => existingCategories.includes(c));
+            existingCategories.forEach(c => {
+                if (!data.config.categoryOrder.includes(c)) data.config.categoryOrder.push(c);
+            });
+        }
+        
+        if (!data.config.categoryOrder.includes(catName)) {
+            data.config.categoryOrder.push(catName);
+        }
+
+        this.openCategories.add(catName);
+        this.updateChangesUI();
+        this.render();
+        this.showToast(`✅ Categoría "${catName}" creada`);
+
+        // Scroll to the new category and highlight it
+        setTimeout(() => {
+            const newCatEl = document.querySelector(`.admin-category[data-category="${catName}"]`);
+            if (newCatEl) {
+                newCatEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                newCatEl.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+                newCatEl.style.boxShadow = '0 0 0 3px rgba(52, 199, 89, 0.4)';
+                newCatEl.style.borderColor = '#34c759';
+                setTimeout(() => {
+                    newCatEl.style.boxShadow = '';
+                    newCatEl.style.borderColor = '';
+                }, 2000);
+            }
+        }, 100);
+    }
+
+    renameCategory(oldName) {
+        const name = prompt('Introduce el nuevo nombre para la categoría:', oldName);
+        if (!name) return;
+        const newName = name.trim().toUpperCase();
+        if (!newName || newName === oldName) return;
+
+        const data = this.getCurrentData();
+        if (data[newName]) {
+            alert('Ya existe una categoría con ese nombre.');
+            return;
+        }
+
+        // Move data
+        data[newName] = data[oldName];
+        delete data[oldName];
+
+        // Update category order
+        if (data.config && data.config.categoryOrder) {
+            const index = data.config.categoryOrder.indexOf(oldName);
+            if (index !== -1) {
+                data.config.categoryOrder[index] = newName;
+            }
+        }
+
+        // Update disabled categories
+        if (data.config && data.config.disabledCategories) {
+            const index = data.config.disabledCategories.indexOf(oldName);
+            if (index !== -1) {
+                data.config.disabledCategories[index] = newName;
+            }
+        }
+
+        // Update openCategories state
+        if (this.openCategories.has(oldName)) {
+            this.openCategories.delete(oldName);
+            this.openCategories.add(newName);
+        }
+
+        this.updateChangesUI();
+        this.render();
+        this.showToast(`✅ Categoría renombrada a "${newName}"`);
+    }
+
+    deleteCategory(catName) {
+        if (!confirm(`¿Estás seguro de que deseas eliminar la sección "${catName}" y todos sus productos? Esta acción no se puede deshacer.`)) {
+            return;
+        }
+
+        const data = this.getCurrentData();
+        
+        // Remove from data
+        delete data[catName];
+
+        // Remove from categoryOrder
+        if (data.config && data.config.categoryOrder) {
+            data.config.categoryOrder = data.config.categoryOrder.filter(c => c !== catName);
+        }
+
+        // Remove from disabledCategories
+        if (data.config && data.config.disabledCategories) {
+            data.config.disabledCategories = data.config.disabledCategories.filter(c => c !== catName);
+        }
+
+        // Remove from openCategories
+        this.openCategories.delete(catName);
+
+        this.updateChangesUI();
+        this.render();
+        this.showToast(`🗑️ Sección "${catName}" eliminada`);
+    }
+
+    openTransferCategoryModal(catName) {
+        document.getElementById('transferCatName').value = catName;
+        const select = document.getElementById('transferTargetBranch');
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].value === this.activeBranch) {
+                select.options[i].style.display = 'none';
+            } else {
+                select.options[i].style.display = 'block';
+            }
+        }
+        select.value = select.options[0].value === this.activeBranch ? select.options[1].value : select.options[0].value;
+        
+        const modal = document.getElementById('transferCategoryModal');
+        modal.classList.remove('hidden');
+        void modal.offsetWidth;
+        modal.classList.add('show');
+    }
+
+    closeTransferCategoryModal() {
+        const modal = document.getElementById('transferCategoryModal');
+        modal.classList.remove('show');
+        setTimeout(() => modal.classList.add('hidden'), 200);
+    }
+
+    applyTransferCategory() {
+        const catName = document.getElementById('transferCatName').value;
+        const targetBranch = document.getElementById('transferTargetBranch').value;
+        if (!catName || !targetBranch || targetBranch === this.activeBranch) return;
+
+        const sourceData = this.branchData[this.activeBranch];
+        const targetData = this.branchData[targetBranch];
+        
+        targetData[catName] = JSON.parse(JSON.stringify(sourceData[catName] || []));
+        
+        if (!targetData.config) targetData.config = {};
+        if (!targetData.config.categoryOrder) {
+            const existingCategories = Object.keys(targetData).filter(c => c !== 'config');
+            targetData.config.categoryOrder = CATEGORY_ORDER.filter(c => existingCategories.includes(c));
+            existingCategories.forEach(c => {
+                if (!targetData.config.categoryOrder.includes(c)) targetData.config.categoryOrder.push(c);
+            });
+        }
+        if (!targetData.config.categoryOrder.includes(catName)) {
+            targetData.config.categoryOrder.push(catName);
+        }
+
+        this.closeTransferCategoryModal();
+        this.updateChangesUI();
+        this.showToast(`✅ Categoría copiada a ${targetBranch}`);
+    }
+
+    saveNewCategoryOrder() {
+        const categories = [...this.contentEl.querySelectorAll('.admin-category')].map(el => el.dataset.category);
+        const data = this.getCurrentData();
+        if (!data.config) data.config = {};
+        data.config.categoryOrder = categories;
+        this.updateChangesUI();
+    }
+
+    toggleCategoryVisibility(cat, isEnabled) {
+        const data = this.getCurrentData();
+        if (!data.config) data.config = {};
+        if (!data.config.disabledCategories) data.config.disabledCategories = [];
+        
+        const disabled = data.config.disabledCategories;
+        if (isEnabled) {
+            data.config.disabledCategories = disabled.filter(c => c !== cat);
+        } else {
+            if (!disabled.includes(cat)) {
+                disabled.push(cat);
+            }
+        }
+        
+        this.render(this.searchInput.value);
     }
 
     updateProductProperty(productId, category, prop, value) {
@@ -716,9 +1074,13 @@ class AdminApp {
             const origData = this.originalData[branch];
             const curConfig = (branch === this.activeBranch) 
                 ? this._getUIConfig() 
-                : (curData.config || { popup: { title: '', body: '', enabled: false } });
+                : (curData.config || { popup: { title: '', body: '', enabled: false }, disabledCategories: [], categoryOrder: [] });
+            if (!curConfig.disabledCategories) curConfig.disabledCategories = [];
+            if (!curConfig.categoryOrder) curConfig.categoryOrder = [];
             
-            const origConfig = origData.config || { popup: { title: '', body: '', enabled: false } };
+            const origConfig = origData.config || { popup: { title: '', body: '', enabled: false }, disabledCategories: [], categoryOrder: [] };
+            if (!origConfig.disabledCategories) origConfig.disabledCategories = [];
+            if (!origConfig.categoryOrder) origConfig.categoryOrder = [];
             
             if (JSON.stringify(curConfig) !== JSON.stringify(origConfig)) {
                 changed.push(branch);

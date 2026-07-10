@@ -70,6 +70,13 @@
                 </div>
             </div>
             <div class="toolbar-right">
+                <button class="btn-tool" id="btnNewCategory" title="Crear nueva sección">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Nueva Sección
+                </button>
                 <button class="btn-tool" id="btnSyncLocal" title="Sincronizar con archivos JSON locales">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -79,6 +86,14 @@
                         <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
                     </svg>
                     Sincronizar JSON
+                </button>
+                <button class="btn-tool" id="btnExportJSON" title="Descargar archivo JSON de esta sucursal">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Exportar
                 </button>
                 <button class="btn-tool" id="btnBulkAdjust" title="Ajuste masivo de precios">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -236,6 +251,30 @@
             <div class="modal-actions">
                 <button class="btn-secondary" id="btnEditCancel">Cancelar</button>
                 <button class="btn-primary" id="btnEditApply">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Category Modal -->
+    <div class="modal-overlay hidden" id="transferCategoryModal">
+        <div class="modal-card">
+            <h2 class="modal-title">Copiar Categoría</h2>
+            <p class="modal-desc">Copia esta sección y todos sus productos a otra sucursal.</p>
+
+            <input type="hidden" id="transferCatName">
+
+            <div class="modal-field">
+                <label>Sucursal Destino</label>
+                <select id="transferTargetBranch" style="width:100%; padding:0.65rem 0.85rem; border:1.5px solid var(--color-border); border-radius:10px; font-family:var(--font-body); font-size:0.9rem; outline:none; background:#fff;">
+                    <option value="leloir">Parque Leloir</option>
+                    <option value="castelar">Castelar</option>
+                    <option value="pinamar">Pinamar</option>
+                </select>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 1.5rem;">
+                <button class="btn-secondary" id="btnTransferCancel">Cancelar</button>
+                <button class="btn-primary" id="btnTransferApply">Copiar Categoría</button>
             </div>
         </div>
     </div>

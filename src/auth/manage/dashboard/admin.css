@@ -251,19 +251,60 @@
     background: #fff;
     border: 1px solid var(--color-border);
     box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-    transition: box-shadow 0.25s ease;
+    transition: box-shadow 0.25s ease, opacity 0.25s ease;
+}
+
+.admin-category.category-disabled {
+    opacity: 0.55;
+    background: #f9f9fa;
+}
+
+.admin-category.category-disabled .category-products {
+    pointer-events: none;
 }
 
 .admin-category:hover {
     box-shadow: 0 3px 14px rgba(0,0,0,0.06);
 }
 
-.category-toggle {
-    width: 100%;
+.category-header-wrap {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1.25rem;
+    padding-right: 1.25rem;
+    border-bottom: 1px solid transparent;
+}
+
+.drag-handle {
+    padding: 1rem 0.5rem 1rem 1.25rem;
+    cursor: grab;
+    color: var(--color-text-light);
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: var(--color-text);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.admin-category.dragging {
+    opacity: 0.6;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transform: scale(1.02);
+    z-index: 100;
+}
+
+.category-toggle {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0.5rem 1rem 1.25rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -274,6 +315,30 @@
     text-transform: uppercase;
     color: var(--color-text);
     transition: background-color 0.2s ease;
+}
+
+.category-visibility-toggle {
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+}
+
+.btn-options {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--color-text-light);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.2rem;
+}
+
+.btn-options:hover {
+    background: rgba(0,0,0,0.05);
+    color: var(--color-text);
 }
 
 .category-toggle:hover {
@@ -662,9 +727,7 @@ input:checked + .slider:before {
     align-items: center;
     justify-content: space-between;
     padding: 0.85rem 1.25rem;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: #ffffff;
     border-top: 1px solid var(--color-border);
     z-index: 100;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
@@ -747,9 +810,7 @@ input:checked + .slider:before {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.65);
     z-index: 200;
     display: flex;
     align-items: center;
