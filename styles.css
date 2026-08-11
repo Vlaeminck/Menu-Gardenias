@@ -439,6 +439,18 @@ h4 {
     align-items: center;
     gap: 3px;
     border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.tag:active {
+    transform: scale(0.94);
 }
 
 .tag.vegan {
@@ -457,6 +469,51 @@ h4 {
     background-color: var(--badge-tacc-bg);
     color: var(--badge-tacc-text);
     border-color: var(--badge-tacc-border);
+}
+
+/* Banner de filtro dietético activo */
+.diet-filter-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #111111;
+    color: #ffffff;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.82rem;
+    margin: 0 auto 1.5rem auto;
+    max-width: 400px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    animation: fadeInUp 0.25s ease-out;
+}
+
+.diet-filter-banner strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.diet-filter-clear {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #ffffff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+    padding: 0;
+}
+
+.diet-filter-clear:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.08);
+}
+
+.diet-filter-clear:active {
+    transform: scale(0.92);
 }
 
 /* Desktop Responsiveness */

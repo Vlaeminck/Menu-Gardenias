@@ -48,6 +48,7 @@ const CONFIG = {
 class MenuApp {
     constructor() {
         this.products = {};
+        this.activeDietFilter = null; // 'vegan' | 'veggie' | 'tacc' | null
         this.categoriesInfo = {
             'todos': { titulo: 'Carta Completa', descripcion: '' },
             'DESAYUNOS & MERIENDAS': {
@@ -360,7 +361,7 @@ class MenuApp {
             : (product.descripcion && /(\bgf\b|gluten free|sin gluten|s\/tacc)/i.test(product.descripcion));
 
         const veganIcon = isVegan ? `
-            <span class="tag vegan" title="Vegano">
+            <span class="tag vegan" data-diet="vegan" role="button" tabindex="0" title="Filtrar vegano">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-3.5H9.5l3.5-6v3.5h1.5l-3.5 6z"/>
                 </svg>
@@ -368,7 +369,7 @@ class MenuApp {
             </span>` : '';
 
         const veggieIcon = isVeggie ? `
-            <span class="tag veggie" title="Vegetariano">
+            <span class="tag veggie" data-diet="veggie" role="button" tabindex="0" title="Filtrar vegetariano">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8.17,20C12.5,20 16,16.5 16,12.17C16,12.13 16,12.09 16,12.05C16.5,12 17,11.5 17,11C17,10.5 16.5,10 16,10C16,8.67 16.5,7.33 17.5,6.33C18.5,5.33 20,5 21,5C21,4 20,3 19,3C18,3 16.67,3.5 15.67,4.5C14.67,5.5 14,7 14,8C13,8 12,9 12,10C12,10.5 12.5,11 13,11C13.04,11 13.08,11 13.12,11C13.04,11.38 13,11.77 13,12.17C13,14.82 10.82,17 8.17,17C7.84,17 7.5,16.95 7.2,16.86L17,8Z"/>
                 </svg>
@@ -376,7 +377,7 @@ class MenuApp {
             </span>` : '';
 
         const taccIcon = isGlutenFree ? `
-            <span class="tag tacc" title="Sin TACC">
+            <span class="tag tacc" data-diet="tacc" role="button" tabindex="0" title="Filtrar sin TACC">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                      <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
                 </svg>
@@ -404,16 +405,75 @@ class MenuApp {
         `;
     }
 
+    /**
+     * Checks if a product matches a diet filter.
+     * Uses the same detection logic as createProductCard.
+     */
+    _matchesDiet(product, diet) {
+        switch (diet) {
+            case 'vegan':
+                return (typeof product.vegan === 'boolean')
+                    ? product.vegan
+                    : (product.descripcion && /\b(vegano|vegan)\b/i.test(product.descripcion));
+            case 'veggie':
+                return (typeof product.veggie === 'boolean')
+                    ? product.veggie
+                    : (product.descripcion && /\b(veggie|vegetariano)\b/i.test(product.descripcion));
+            case 'tacc':
+                return (typeof product.glutenFree === 'boolean')
+                    ? product.glutenFree
+                    : (product.descripcion && /(\bgf\b|gluten free|sin gluten|s\/tacc)/i.test(product.descripcion));
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Returns the human-readable label for a diet filter key.
+     */
+    _dietLabel(diet) {
+        const labels = { vegan: 'Vegano', veggie: 'Vegetariano', tacc: 'Sin TACC' };
+        return labels[diet] || diet;
+    }
+
     renderProducts(filterCategory = 'todos', searchTerm = '') {
         const container = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
         container.innerHTML = '';
+
+        // Increment render token to cancel any previous pending chunk callbacks
+        this.renderToken = (this.renderToken || 0) + 1;
+        const currentToken = this.renderToken;
+
+        // ── Diet filter banner ──
+        if (this.activeDietFilter) {
+            const bannerHTML = `
+                <div class="diet-filter-banner" id="dietFilterBanner">
+                    <span>Mostrando: <strong>${this._dietLabel(this.activeDietFilter)}</strong></span>
+                    <button type="button" class="diet-filter-clear" id="clearDietFilter" aria-label="Quitar filtro">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', bannerHTML);
+
+            document.getElementById('clearDietFilter')?.addEventListener('click', () => {
+                this.activeDietFilter = null;
+                this.renderProducts('todos');
+                this.setupIntersectionObserver();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
         const config = this.currentData.config || {};
         const disabledCats = config.disabledCategories || [];
         const existingCategories = Object.keys(this.currentData).filter(cat => cat !== 'config' && !disabledCats.includes(cat));
         let categoriesToRender = [];
 
-        if (filterCategory === 'todos') {
+        // When diet filter is active, always show all categories (to find matches across the menu)
+        if (filterCategory === 'todos' || this.activeDietFilter) {
             const savedOrder = config.categoryOrder || [];
             if (savedOrder.length > 0) {
                 categoriesToRender = savedOrder.filter(cat => existingCategories.includes(cat));
@@ -429,10 +489,20 @@ class MenuApp {
 
         let hasProducts = false;
 
+        const normalize = (str) => (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const term = normalize(searchTerm);
+
         const renderCategoryChunk = (index) => {
+            // Cancel if a newer render request was initiated
+            if (currentToken !== this.renderToken) return;
+
             if (index >= categoriesToRender.length) {
                 if (!hasProducts) {
-                    container.innerHTML = '<div style="text-align:center; padding: 3rem 1rem; color: #888;"><p>No se encontraron productos que coincidan con tu búsqueda.</p></div>';
+                    const msg = this.activeDietFilter
+                        ? `No hay productos <strong>${this._dietLabel(this.activeDietFilter)}</strong> en la carta.`
+                        : 'No se encontraron productos que coincidan con tu búsqueda.';
+                    container.insertAdjacentHTML('beforeend',
+                        `<div style="text-align:center; padding: 3rem 1rem; color: #888;"><p>${msg}</p></div>`);
                 }
                 return;
             }
@@ -442,11 +512,13 @@ class MenuApp {
 
             if (catProducts && catProducts.length > 0) {
                 const filteredProducts = catProducts.filter(p => {
-                    if (!searchTerm) return true;
-                    const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-                    const term = normalize(searchTerm);
-                    return normalize(p.nombre).includes(term) ||
-                        (p.descripcion && normalize(p.descripcion).includes(term));
+                    // Diet filter
+                    if (this.activeDietFilter && !this._matchesDiet(p, this.activeDietFilter)) {
+                        return false;
+                    }
+                    // Search filter
+                    if (!term) return true;
+                    return normalize(p.nombre).includes(term) || normalize(p.descripcion).includes(term);
                 });
 
                 if (filteredProducts.length > 0) {
@@ -562,6 +634,34 @@ class MenuApp {
                 clearBtn.classList.add('hidden');
                 searchInput.focus();
                 this.renderProducts('todos', '');
+            });
+        }
+
+        // Diet badge click filter (event delegation on products container)
+        const productsContainer = document.getElementById(CONFIG.SELECTORS.PRODUCTS_CONTAINER);
+        if (productsContainer) {
+            productsContainer.addEventListener('click', (e) => {
+                const tag = e.target.closest('[data-diet]');
+                if (!tag) return;
+                e.preventDefault();
+                e.stopPropagation();
+
+                const diet = tag.dataset.diet;
+
+                // Toggle: if same filter is active, clear it
+                if (this.activeDietFilter === diet) {
+                    this.activeDietFilter = null;
+                } else {
+                    this.activeDietFilter = diet;
+                }
+
+                // Clear search when filtering by diet
+                if (searchInput) searchInput.value = '';
+                if (clearBtn) clearBtn.classList.add('hidden');
+
+                this.renderProducts('todos');
+                this.setupIntersectionObserver();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
     }
