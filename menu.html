@@ -50,12 +50,18 @@
         </nav>
         <div class="search-container">
             <div class="search-bar">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="search-icon">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" id="searchInput" placeholder="Buscar en la carta...">
+                <input type="text" id="searchInput" placeholder="Buscar en la carta..." autocomplete="off">
+                <button type="button" id="clearSearch" class="clear-search-btn hidden" aria-label="Limpiar búsqueda">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
@@ -89,6 +95,15 @@
             <button id="closePopup" class="ios-alert-btn">OK</button>
         </div>
     </div>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('⚡ Service Worker registrado'))
+                .catch(err => console.warn('SW registro falló:', err));
+        }
+    </script>
 
     <!-- Firebase SDK (Config only for REST API) -->
     <script defer src="firebase-config.js"></script>

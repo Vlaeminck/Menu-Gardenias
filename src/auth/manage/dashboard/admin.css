@@ -622,6 +622,10 @@ input:checked + .slider:before {
         grid-template-columns: 1fr;
     }
 }
+.diet-toggle.vegan input:checked + .diet-switch {
+    background: #10b981;
+}
+
 .diet-toggle.veggie input:checked + .diet-switch {
     background: #34c759;
 }

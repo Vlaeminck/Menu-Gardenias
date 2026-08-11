@@ -285,6 +285,12 @@ class AdminApp {
                             </svg>
                         </button>
                         <div class="category-visibility-toggle">
+                            <button class="btn-options btn-add-product" data-cat="${cat}" title="Agregar producto a esta sección" style="margin-right: 0.5rem; color: #34c759;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
                             <button class="btn-options btn-rename-cat" data-cat="${cat}" title="Renombrar categoría" style="margin-right: 0.5rem;">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 20h9"></path>
@@ -330,7 +336,7 @@ class AdminApp {
         const original = this.getOriginalProduct(product.id, category);
         
         const hasPriceChange = original && original.precio !== product.precio;
-        const hasDietChange  = original && (original.veggie !== product.veggie || original.glutenFree !== product.glutenFree);
+        const hasDietChange  = original && (original.vegan !== product.vegan || original.veggie !== product.veggie || original.glutenFree !== product.glutenFree);
         const hasTextChange  = original && (original.nombre !== product.nombre || original.descripcion !== product.descripcion);
         const changed = hasPriceChange || hasDietChange || hasTextChange;
 
@@ -342,7 +348,14 @@ class AdminApp {
                 </div>
                 
                 <div class="row-diet-toggles">
-                    <label class="diet-toggle veggie" title="Veggie">
+                    <label class="diet-toggle vegan" title="Vegano">
+                        <input type="checkbox" class="diet-input" data-type="vegan" 
+                               data-id="${product.id}" data-category="${category}"
+                               ${product.vegan ? 'checked' : ''}>
+                        <div class="diet-switch"></div>
+                        <span class="diet-label">VGN</span>
+                    </label>
+                    <label class="diet-toggle veggie" title="Vegetariano">
                         <input type="checkbox" class="diet-input" data-type="veggie" 
                                data-id="${product.id}" data-category="${category}"
                                ${product.veggie ? 'checked' : ''}>
@@ -474,6 +487,13 @@ class AdminApp {
 
         // Delegate content events
         this.contentEl.addEventListener('click', (e) => {
+            // Add Product to Category
+            const addProductBtn = e.target.closest('.btn-add-product');
+            if (addProductBtn) {
+                this.addProductToCategory(addProductBtn.dataset.cat);
+                return;
+            }
+
             // Rename Category
             const renameBtn = e.target.closest('.btn-rename-cat');
             if (renameBtn) {
@@ -684,6 +704,27 @@ class AdminApp {
                 this.closeTransferCategoryModal();
             }
         });
+    }
+
+    addProductToCategory(catName) {
+        const data = this.getCurrentData();
+        if (!data[catName]) data[catName] = [];
+
+        const newProduct = {
+            id: Date.now(),
+            nombre: "Nuevo producto",
+            descripcion: "",
+            precio: 0,
+            vegan: false,
+            veggie: false,
+            glutenFree: false
+        };
+
+        data[catName].unshift(newProduct);
+        this.openCategories.add(catName);
+        this.updateChangesUI();
+        this.render();
+        this.showToast(`✨ Producto agregado a "${catName}"`);
     }
 
     createNewCategory() {
@@ -928,6 +969,7 @@ class AdminApp {
     isProductChanged(p, orig) {
         if (!orig) return true;
         return orig.precio !== p.precio || 
+               orig.vegan !== p.vegan ||
                orig.veggie !== p.veggie || 
                orig.glutenFree !== p.glutenFree ||
                orig.nombre !== p.nombre ||
