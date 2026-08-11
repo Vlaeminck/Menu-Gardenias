@@ -182,7 +182,8 @@ class GardeniasHandler(SimpleHTTPRequestHandler):
 
     def end_headers(self):
         """Disable caching for JSON data files."""
-        if self.path and self.path.startswith('/data/'):
+        path = getattr(self, 'path', None)
+        if path and path.startswith('/data/'):
             self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
             self.send_header('Pragma', 'no-cache')
             self.send_header('Expires', '0')
